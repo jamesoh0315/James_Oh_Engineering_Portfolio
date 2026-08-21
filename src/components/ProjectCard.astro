@@ -1,0 +1,69 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import TagBadge from './TagBadge.astro';
+import { formatDate } from '../utils/format';
+
+interface Props {
+	project: CollectionEntry<'projects'>;
+	/** Skip lazy-loading for cards above the fold. */
+	eager?: boolean;
+}
+
+const { project, eager = false } = Astro.props;
+const { title, date, summary, tags, coverImage, coverAlt } = project.data;
+
+/** Cap visible tags so a long list can't break the card rhythm. */
+const MAX_TAGS = 4;
+const visibleTags = tags.slice(0, MAX_TAGS);
+const overflow = tags.length - visibleTags.length;
+---
+
+<article class="group relative">
+	<a
+		href={`/projects/${project.id}`}
+		class="flex h-full flex-col overflow-hidden rounded-md border border-line bg-surface transition-colors duration-300 hover:border-signal/40 focus-visible:border-signal/40"
+	>
+		<!-- Fixed 4:3 crop: image dimensions never affect grid geometry. -->
+		<div class="relative aspect-[4/3] overflow-hidden bg-ink">
+			<Image
+				src={coverImage}
+				alt={coverAlt || title}
+				widths={[400, 800, 1200]}
+				sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+				loading={eager ? 'eager' : 'lazy'}
+				class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+			/>
+			<div
+				class="pointer-events-none absolute inset-0 bg-gradient-to-t from-surface/70 via-transparent to-transparent"
+				aria-hidden="true"
+			>
+			</div>
+		</div>
+
+		<div class="flex flex-1 flex-col gap-3 p-5">
+			<time datetime={date.toISOString()} class="label-mono">
+				{formatDate(date)}
+			</time>
+
+			<h3
+				class="text-lg font-semibold leading-snug tracking-tight transition-colors group-hover:text-signal"
+			>
+				{title}
+			</h3>
+
+			<p class="line-clamp-2 text-sm leading-relaxed text-fog">{summary}</p>
+
+			{
+				visibleTags.length > 0 && (
+					<div class="mt-auto flex flex-wrap gap-1.5 pt-2">
+						{visibleTags.map((tag) => (
+							<TagBadge label={tag} />
+						))}
+						{overflow > 0 && <TagBadge label={`+${overflow}`} />}
+					</div>
+				)
+			}
+		</div>
+	</a>
+</article>

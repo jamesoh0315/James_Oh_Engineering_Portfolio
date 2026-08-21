@@ -1,0 +1,44 @@
+---
+import { SITE } from '../consts';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-24 border-t border-line">
+	<div
+		class="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10 sm:flex-row sm:items-center sm:justify-between"
+	>
+		<div class="space-y-1">
+			<p class="text-sm font-semibold">{SITE.name}</p>
+			<p class="font-mono text-[11px] tracking-[0.1em] text-fog">
+				{SITE.role} · {SITE.school}
+			</p>
+		</div>
+
+		<div class="flex flex-wrap items-center gap-x-5 gap-y-2">
+			<a
+				href={`mailto:${SITE.email}`}
+				class="font-mono text-[11px] uppercase tracking-[0.12em] text-fog transition-colors hover:text-signal"
+			>
+				Email
+			</a>
+			<a
+				href={SITE.linkedin}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="font-mono text-[11px] uppercase tracking-[0.12em] text-fog transition-colors hover:text-signal"
+			>
+				LinkedIn
+			</a>
+			<a
+				href={SITE.resume}
+				class="font-mono text-[11px] uppercase tracking-[0.12em] text-fog transition-colors hover:text-signal"
+			>
+				Résumé
+			</a>
+			<span class="font-mono text-[11px] tracking-[0.1em] text-fog/60">
+				© {year}
+			</span>
+		</div>
+	</div>
+</footer>

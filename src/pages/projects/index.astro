@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectGrid from '../../components/ProjectGrid.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import { getSortedProjects } from '../../utils/projects';
+
+const projects = await getSortedProjects();
+---
+
+<BaseLayout
+	title="Projects"
+	description="Mechanical design and fabrication projects — CAD, analysis, prototyping, and machining."
+>
+	<section class="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+		<SectionHeading
+			index={String(projects.length).padStart(2, '0')}
+			eyebrow="Archive"
+			title="All Projects"
+		/>
+
+		<p class="mt-6 max-w-xl text-base leading-relaxed text-fog">
+			Every project, newest first — mechanical design, analysis, and the fabrication
+			that followed.
+		</p>
+
+		<div class="mt-12">
+			<ProjectGrid projects={projects} eagerCount={3} />
+		</div>
+	</section>
+</BaseLayout>

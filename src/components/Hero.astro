@@ -1,0 +1,84 @@
+---
+import { SITE } from '../consts';
+
+interface Props {
+	projectCount: number;
+}
+
+const { projectCount } = Astro.props;
+---
+
+<section class="relative overflow-hidden border-b border-line">
+	<div class="blueprint-grid absolute inset-0 opacity-60" aria-hidden="true"></div>
+
+	<div class="relative mx-auto max-w-6xl px-6 pb-20 pt-20 sm:pb-28 sm:pt-28">
+		<div class="flex items-center gap-3">
+			<span class="relative flex h-1.5 w-1.5" aria-hidden="true">
+				<span
+					class="absolute inline-flex h-full w-full animate-ping rounded-full bg-signal opacity-75"
+				></span>
+				<span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-signal"></span>
+			</span>
+			<span class="label-mono">Seeking Summer 2027 Internships</span>
+		</div>
+
+		<h1
+			class="mt-7 max-w-4xl text-5xl font-semibold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl"
+		>
+			{SITE.name}
+		</h1>
+
+		<p class="mt-6 max-w-2xl text-xl leading-snug text-chalk/90 sm:text-2xl">
+			{SITE.role} at the <span class="text-signal">{SITE.school}</span>, specializing
+			in {SITE.focus}.
+		</p>
+
+		<p class="mt-6 max-w-2xl text-base leading-relaxed text-fog">
+			I design, analyze, and build mechanical hardware — from clamp preload
+			calculations and FEA through to machining and fit-up on the bench. Engineering
+			Physics gives me the analysis; the shop keeps me honest about whether the part
+			actually works.
+		</p>
+
+		<div class="mt-10 flex flex-wrap items-center gap-3">
+			<a
+				href="#work"
+				class="rounded-sm bg-signal px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.12em] text-ink transition-opacity hover:opacity-90"
+			>
+				View Work
+			</a>
+			<a
+				href="#contact"
+				class="rounded-sm border border-line px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.12em] text-chalk transition-colors hover:border-signal/50 hover:text-signal"
+			>
+				Get in Touch
+			</a>
+			<a
+				href={SITE.resume}
+				class="rounded-sm px-3 py-2.5 font-mono text-[11px] uppercase tracking-[0.12em] text-fog underline-offset-4 transition-colors hover:text-chalk hover:underline"
+			>
+				Résumé ↗
+			</a>
+		</div>
+
+		<!-- Spec strip: reads like a title block on a drawing. -->
+		<dl
+			class="mt-16 grid max-w-2xl grid-cols-2 gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-3"
+		>
+			<div class="bg-ink px-5 py-4">
+				<dt class="label-mono">Program</dt>
+				<dd class="mt-1.5 text-sm font-medium">Engineering Physics</dd>
+			</div>
+			<div class="bg-ink px-5 py-4">
+				<dt class="label-mono">Focus</dt>
+				<dd class="mt-1.5 text-sm font-medium">{SITE.focus}</dd>
+			</div>
+			<div class="col-span-2 bg-ink px-5 py-4 sm:col-span-1">
+				<dt class="label-mono">Projects</dt>
+				<dd class="mt-1.5 font-mono text-sm font-medium text-signal">
+					{String(projectCount).padStart(2, '0')}
+				</dd>
+			</div>
+		</dl>
+	</div>
+</section>

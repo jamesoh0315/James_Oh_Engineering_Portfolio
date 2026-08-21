@@ -1,0 +1,99 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* ---------------------------------------------------------------------------
+   Design tokens. Tailwind v4 is configured here in CSS, not in a JS config
+   file. Anything defined in @theme becomes a utility automatically, e.g.
+   --color-signal -> bg-signal, text-signal, border-signal.
+   --------------------------------------------------------------------------- */
+@theme {
+	--color-ink: #08090b;      /* page background       */
+	--color-surface: #101216;  /* cards, raised panels  */
+	--color-line: #20242b;     /* hairline borders      */
+	--color-fog: #8b929c;      /* muted / secondary text*/
+	--color-chalk: #e9ecf1;    /* primary text          */
+	--color-signal: #38bdf8;   /* the one accent        */
+
+	--font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+	--font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+@layer base {
+	html {
+		scroll-behavior: smooth;
+		-webkit-text-size-adjust: 100%;
+	}
+
+	body {
+		background-color: var(--color-ink);
+		color: var(--color-chalk);
+		font-family: var(--font-sans);
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	::selection {
+		background-color: color-mix(in oklab, var(--color-signal) 30%, transparent);
+		color: var(--color-chalk);
+	}
+
+	:focus-visible {
+		outline: 2px solid var(--color-signal);
+		outline-offset: 3px;
+		border-radius: 2px;
+	}
+}
+
+@layer components {
+	/* Faint blueprint grid used behind the hero. Pure CSS — no image asset. */
+	.blueprint-grid {
+		background-image:
+			linear-gradient(to right, var(--color-line) 1px, transparent 1px),
+			linear-gradient(to bottom, var(--color-line) 1px, transparent 1px);
+		background-size: 64px 64px;
+		mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 20%, transparent 75%);
+	}
+
+	/* Small monospace label used for section indices and metadata. */
+	.label-mono {
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--color-fog);
+	}
+}
+
+/* Tune @tailwindcss/typography to the dark palette for project detail bodies. */
+@layer utilities {
+	.prose-engineering {
+		--tw-prose-invert-body: var(--color-fog);
+		--tw-prose-invert-headings: var(--color-chalk);
+		--tw-prose-invert-lead: var(--color-fog);
+		--tw-prose-invert-links: var(--color-signal);
+		--tw-prose-invert-bold: var(--color-chalk);
+		--tw-prose-invert-counters: var(--color-fog);
+		--tw-prose-invert-bullets: var(--color-line);
+		--tw-prose-invert-hr: var(--color-line);
+		--tw-prose-invert-quotes: var(--color-chalk);
+		--tw-prose-invert-quote-borders: var(--color-signal);
+		--tw-prose-invert-captions: var(--color-fog);
+		--tw-prose-invert-code: var(--color-signal);
+		--tw-prose-invert-pre-bg: var(--color-surface);
+		--tw-prose-invert-th-borders: var(--color-line);
+		--tw-prose-invert-td-borders: var(--color-line);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		transition-duration: 0.01ms !important;
+	}
+}

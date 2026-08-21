@@ -1,17 +1,122 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import ProjectGrid from '../components/ProjectGrid.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import { getSortedProjects } from '../utils/projects';
+import { SITE, SKILLS } from '../consts';
 
+const projects = await getSortedProjects();
+
+/**
+ * Featured projects float to the top; sort is stable, so date order is
+ * preserved within each group. Homepage shows at most six.
+ */
+const HOMEPAGE_LIMIT = 6;
+const highlights = [...projects]
+	.sort((a, b) => Number(b.data.featured) - Number(a.data.featured))
+	.slice(0, HOMEPAGE_LIMIT);
+
+const hasMore = projects.length > HOMEPAGE_LIMIT;
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout>
+	<Hero projectCount={projects.length} />
+
+	<!-- ── Work ─────────────────────────────────────────────────────────── -->
+	<section class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
+		<div class="flex flex-wrap items-end justify-between gap-6">
+			<SectionHeading id="work" index="01" eyebrow="Selected Work" title="Projects" />
+			{
+				hasMore && (
+					<a
+						href="/projects"
+						class="font-mono text-[11px] uppercase tracking-[0.12em] text-fog underline-offset-4 transition-colors hover:text-signal hover:underline"
+					>
+						All {projects.length} projects →
+					</a>
+				)
+			}
+		</div>
+
+		<div class="mt-10">
+			<ProjectGrid projects={highlights} />
+		</div>
+	</section>
+
+	<!-- ── About ────────────────────────────────────────────────────────── -->
+	<section class="border-y border-line bg-surface/40">
+		<div class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
+			<SectionHeading id="about" index="02" eyebrow="Background" title="About" />
+
+			<div class="mt-10 grid gap-12 lg:grid-cols-[1.4fr_1fr]">
+				<div class="space-y-5 text-base leading-relaxed text-fog">
+					<p>
+						I'm an <span class="text-chalk">Engineering Physics</span> student at the
+						{SITE.school}, working toward a career in mechanical design. Eng Phys is
+						a broad program — mechanics, electronics, software, and physics — and I've
+						pointed that breadth squarely at
+						<span class="text-chalk">mechanical engineering</span>.
+					</p>
+					<p>
+						What I care about is the loop between analysis and hardware: run the
+						numbers, model the part, make it, then find out where the model was wrong.
+						Most of the projects here started because something broke, bound, or
+						slipped, and the interesting work was figuring out why.
+					</p>
+					<p>
+						I'm currently looking for <span class="text-chalk">mechanical
+						engineering internships</span> where I can contribute to real design work —
+						CAD, analysis, prototyping, and time on the shop floor.
+					</p>
+				</div>
+
+				<div>
+					<h3 class="label-mono">Tools &amp; Skills</h3>
+					<ul class="mt-4 flex flex-wrap gap-2">
+						{
+							SKILLS.map((skill) => (
+								<li class="rounded-sm border border-line bg-ink px-2.5 py-1.5 font-mono text-[11px] tracking-[0.08em] text-fog">
+									{skill}
+								</li>
+							))
+						}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ── Contact ──────────────────────────────────────────────────────── -->
+	<section class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
+		<SectionHeading id="contact" index="03" eyebrow="Contact" title="Let's talk" />
+
+		<p class="mt-6 max-w-xl text-base leading-relaxed text-fog">
+			Open to mechanical engineering internships, co-ops, and design team work. The
+			fastest way to reach me is email.
+		</p>
+
+		<div class="mt-8 flex flex-wrap items-center gap-3">
+			<a
+				href={`mailto:${SITE.email}`}
+				class="rounded-sm bg-signal px-5 py-2.5 font-mono text-[11px] tracking-[0.06em] text-ink transition-opacity hover:opacity-90"
+			>
+				{SITE.email}
+			</a>
+			<a
+				href={SITE.linkedin}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="rounded-sm border border-line px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.12em] text-chalk transition-colors hover:border-signal/50 hover:text-signal"
+			>
+				LinkedIn ↗
+			</a>
+			<a
+				href={SITE.resume}
+				class="rounded-sm border border-line px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.12em] text-chalk transition-colors hover:border-signal/50 hover:text-signal"
+			>
+				Résumé ↗
+			</a>
+		</div>
+	</section>
+</BaseLayout>
