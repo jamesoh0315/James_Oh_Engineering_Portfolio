@@ -1,11 +1,10 @@
 ---
 title: "Carrier Bearing Tab"
-date: 2025-06-20
+order: 4
 summary: "A sheet metal mounting tab redesigned around a fatigue crack, using a stress analysis to find the real failure driver before changing geometry."
 tags: ["Sheet Metal", "Stress Analysis", "DFM", "SolidWorks"]
 coverImage: ../../assets/placeholder-4.jpg
 coverAlt: "Placeholder image for the carrier bearing tab project."
-featured: false
 ---
 
 ## Overview

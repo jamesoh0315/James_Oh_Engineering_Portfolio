@@ -2,7 +2,6 @@
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import TagBadge from './TagBadge.astro';
-import { formatDate } from '../utils/format';
 
 interface Props {
 	project: CollectionEntry<'projects'>;
@@ -11,7 +10,7 @@ interface Props {
 }
 
 const { project, eager = false } = Astro.props;
-const { title, date, summary, tags, coverImage, coverAlt } = project.data;
+const { title, summary, tags, coverImage, coverAlt } = project.data;
 
 /** Cap visible tags so a long list can't break the card rhythm. */
 const MAX_TAGS = 4;
@@ -42,10 +41,6 @@ const overflow = tags.length - visibleTags.length;
 		</div>
 
 		<div class="flex flex-1 flex-col gap-3 p-5">
-			<time datetime={date.toISOString()} class="label-mono">
-				{formatDate(date)}
-			</time>
-
 			<h3
 				class="text-lg font-semibold leading-snug tracking-tight transition-colors group-hover:text-signal"
 			>

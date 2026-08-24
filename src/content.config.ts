@@ -19,14 +19,15 @@ const projects = defineCollection({
 	schema: ({ image }) =>
 		z.object({
 			title: z.string(),
-			date: z.coerce.date(),
 			summary: z.string(),
 			tags: z.array(z.string()).default([]),
 			// Path is resolved relative to THIS markdown file, so a cover living in
 			// src/assets/ is written as: ../../assets/your-image.jpg
 			coverImage: image(),
 			coverAlt: z.string().default(''),
-			featured: z.boolean().default(false),
+			// Lower numbers lead. Anything without an `order` falls to the end,
+			// where ties break on filename.
+			order: z.number().default(9999),
 		}),
 });
 

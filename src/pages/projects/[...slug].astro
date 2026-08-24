@@ -4,7 +4,6 @@ import { render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TagBadge from '../../components/TagBadge.astro';
 import { getSortedProjects, type Project } from '../../utils/projects';
-import { formatDateLong } from '../../utils/format';
 
 export async function getStaticPaths() {
 	const projects = await getSortedProjects();
@@ -13,20 +12,20 @@ export async function getStaticPaths() {
 		params: { slug: project.id },
 		props: {
 			project,
-			newer: projects[i - 1] ?? null,
-			older: projects[i + 1] ?? null,
+			prev: projects[i - 1] ?? null,
+			next: projects[i + 1] ?? null,
 		},
 	}));
 }
 
 interface Props {
 	project: Project;
-	newer: Project | null;
-	older: Project | null;
+	prev: Project | null;
+	next: Project | null;
 }
 
-const { project, newer, older } = Astro.props;
-const { title, date, summary, tags, coverImage, coverAlt } = project.data;
+const { project, prev, next } = Astro.props;
+const { title, summary, tags, coverImage, coverAlt } = project.data;
 
 const { Content } = await render(project);
 ---
@@ -43,11 +42,7 @@ const { Content } = await render(project);
 					← All Projects
 				</a>
 
-				<time datetime={date.toISOString()} class="label-mono mt-8 block">
-					{formatDateLong(date)}
-				</time>
-
-				<h1 class="mt-3 text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
+				<h1 class="mt-8 text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
 					{title}
 				</h1>
 
@@ -97,33 +92,33 @@ const { Content } = await render(project);
 
 		<!-- ── Prev / next ──────────────────────────────────────────────── -->
 		{
-			(newer || older) && (
+			(prev || next) && (
 				<nav
 					aria-label="More projects"
 					class="mx-auto grid max-w-5xl gap-4 px-6 pb-8 sm:grid-cols-2"
 				>
-					{newer ? (
+					{prev ? (
 						<a
-							href={`/projects/${newer.id}`}
+							href={`/projects/${prev.id}`}
 							class="group rounded-md border border-line bg-surface p-5 transition-colors hover:border-signal/40"
 						>
-							<span class="label-mono">← Newer</span>
+							<span class="label-mono">← Previous</span>
 							<span class="mt-2 block text-sm font-medium transition-colors group-hover:text-signal">
-								{newer.data.title}
+								{prev.data.title}
 							</span>
 						</a>
 					) : (
 						<span />
 					)}
 
-					{older && (
+					{next && (
 						<a
-							href={`/projects/${older.id}`}
+							href={`/projects/${next.id}`}
 							class="group rounded-md border border-line bg-surface p-5 transition-colors hover:border-signal/40 sm:text-right"
 						>
-							<span class="label-mono">Older →</span>
+							<span class="label-mono">Next →</span>
 							<span class="mt-2 block text-sm font-medium transition-colors group-hover:text-signal">
-								{older.data.title}
+								{next.data.title}
 							</span>
 						</a>
 					)}

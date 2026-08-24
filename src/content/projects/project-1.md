@@ -1,11 +1,10 @@
 ---
 title: "Clamping Shaft Coupler"
-date: 2026-03-14
+order: 1
 summary: "A split-collar coupler that transmits torque between two dissimilar shafts without keyways, sized against slip torque and verified with FEA."
 tags: ["SolidWorks", "GD&T", "FEA", "Machining"]
 coverImage: ../../assets/placeholder-1.jpg
 coverAlt: "Placeholder image for the clamping shaft coupler project."
-featured: true
 ---
 
 ## Overview

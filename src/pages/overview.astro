@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import { existsSync } from 'node:fs';
+import path from 'node:path';
 import { getDeckSlides } from '../utils/deck';
 
 const slides = getDeckSlides();
@@ -10,9 +11,13 @@ const slides = getDeckSlides();
 /**
  * The download button only renders once the PDF actually exists, so it can never
  * 404. Drop the file at public/overview.pdf and it appears on the next build.
+ *
+ * Resolve from process.cwd() (the project root during `astro build`), NOT from
+ * import.meta.url — pages run from a compiled chunk, so a source-relative path
+ * silently misses and the button never appears.
  */
 const PDF_HREF = '/overview.pdf';
-const hasPdf = existsSync(new URL('../../public/overview.pdf', import.meta.url));
+const hasPdf = existsSync(path.join(process.cwd(), 'public', 'overview.pdf'));
 ---
 
 <BaseLayout

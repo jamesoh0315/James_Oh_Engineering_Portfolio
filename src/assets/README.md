@@ -33,27 +33,35 @@ file, not the project root. `src/assets/clamping-coupler.jpg` will fail the buil
 That's it. No code to edit, nothing to register. The homepage grid, the archive
 page at `/projects`, the detail page, and the prev/next links all read from the
 collection, so the new project appears everywhere automatically — sorted into place
-by its `date`.
+by its `order`.
 
 ### Frontmatter fields
 
 | Field | Required | Notes |
 |---|---|---|
 | `title` | yes | |
-| `date` | yes | Controls sort order (newest first) |
 | `summary` | yes | Card text, clamped to two lines |
 | `coverImage` | yes | `../../assets/...` |
+| `order` | no | Position — lowest leads. Omit and it goes last. |
 | `tags` | no | First 4 render, the rest collapse to `+N` |
 | `coverAlt` | no | Alt text — worth writing |
-| `featured` | no | `true` pins it to the homepage's first 6 |
+
+### Ordering
+
+`order` is just a number, lowest first — `order: 1` leads the grid. Renumber to
+rearrange; no need to keep them consecutive (10, 20, 30 leaves room to slot things
+in later). Anything without an `order` falls to the end, sorted by filename.
+
+The homepage shows the first six; `/projects` shows all of them in the same order.
+Put your strongest work first — that's what a recruiter sees before they decide
+whether to keep scrolling.
 
 If you get a field wrong, `npm run build` fails and names the file and the field.
 
 ## Other files
 
-- **Resume PDF → `public/resume.pdf`.** This one *does* belong in `public/` —
-  it's linked directly, not optimized. The header and hero already point at it.
 - **Favicon → `public/`** (already there).
+- **Overview deck →** see `src/assets/deck/README.md`.
 
 ## Cleaning up the placeholders
 

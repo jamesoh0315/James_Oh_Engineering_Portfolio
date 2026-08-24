@@ -10,14 +10,9 @@ import { SITE, SKILLS } from '../consts';
 
 const projects = await getSortedProjects();
 
-/**
- * Featured projects float to the top; sort is stable, so date order is
- * preserved within each group. Homepage shows at most six.
- */
+/** Homepage shows the first six in `order`; the archive shows everything. */
 const HOMEPAGE_LIMIT = 6;
-const highlights = [...projects]
-	.sort((a, b) => Number(b.data.featured) - Number(a.data.featured))
-	.slice(0, HOMEPAGE_LIMIT);
+const highlights = projects.slice(0, HOMEPAGE_LIMIT);
 
 const hasMore = projects.length > HOMEPAGE_LIMIT;
 ---
@@ -110,12 +105,6 @@ const hasMore = projects.length > HOMEPAGE_LIMIT;
 				class="rounded-sm border border-line px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.12em] text-chalk transition-colors hover:border-signal/50 hover:text-signal"
 			>
 				LinkedIn ↗
-			</a>
-			<a
-				href={SITE.resume}
-				class="rounded-sm border border-line px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.12em] text-chalk transition-colors hover:border-signal/50 hover:text-signal"
-			>
-				Resume ↗
 			</a>
 		</div>
 	</section>

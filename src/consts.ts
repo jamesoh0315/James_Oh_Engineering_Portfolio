@@ -10,8 +10,6 @@ export const SITE = {
 		'Engineering Physics student at UBC specializing in mechanical design — CAD, analysis, and fabrication. Seeking mechanical engineering internships.',
 	email: 'jamesoh1@student.ubc.ca',
 	linkedin: 'https://www.linkedin.com/in/jamesoh0315',
-	/** Drop your PDF at public/resume.pdf and this link works. */
-	resume: '/resume.pdf',
 } as const;
 
 export const NAV = [

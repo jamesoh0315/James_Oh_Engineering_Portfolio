@@ -1,11 +1,10 @@
 ---
 title: "Autonomous Claw — APSC 101"
-date: 2025-11-28
+order: 2
 summary: "A four-bar gripper on a rack-driven lift, built to retrieve and sort objects autonomously within a fixed cost and footprint budget."
 tags: ["Mechanism Design", "Prototyping", "Arduino", "Onshape"]
 coverImage: ../../assets/placeholder-2.jpg
 coverAlt: "Placeholder image for the APSC 101 autonomous claw project."
-featured: true
 ---
 
 ## Overview
