@@ -1,10 +1,15 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProjectGrid from '../../components/ProjectGrid.astro';
+import DeckBanner from '../../components/DeckBanner.astro';
 import SectionHeading from '../../components/SectionHeading.astro';
 import { getSortedProjects } from '../../utils/projects';
+import { hasDeck } from '../../utils/deck';
 
 const projects = await getSortedProjects();
+
+/** Hidden until slides actually exist, so it never links to an empty page. */
+const showDeckBanner = hasDeck();
 ---
 
 <BaseLayout
@@ -22,6 +27,8 @@ const projects = await getSortedProjects();
 			Every project, newest first — mechanical design, analysis, and the fabrication
 			that followed.
 		</p>
+
+		{showDeckBanner && <DeckBanner class="mt-10" />}
 
 		<div class="mt-12">
 			<ProjectGrid projects={projects} eagerCount={3} />

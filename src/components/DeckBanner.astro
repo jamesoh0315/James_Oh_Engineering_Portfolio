@@ -1,0 +1,42 @@
+---
+/**
+ * Fast-track callout pointing at /overview.
+ *
+ * Used on both the homepage projects section and the /projects archive. Render it
+ * behind a hasDeck() check so it never links to an empty page.
+ */
+interface Props {
+	class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<a
+	href="/overview"
+	class:list={[
+		'group flex items-center gap-4 rounded-md border border-signal/30 bg-signal/[0.06] px-5 py-5 transition-colors hover:border-signal/60 hover:bg-signal/10 sm:px-6',
+		className,
+	]}
+>
+	<span class="min-w-0 flex-1">
+		<span class="block font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-signal">
+			In a hurry?
+		</span>
+		<span
+			class="mt-1.5 block text-base font-semibold leading-snug tracking-tight text-chalk sm:text-lg"
+		>
+			Skim the 2-minute overview deck
+		</span>
+		<span class="mt-1 block text-sm leading-relaxed text-fog">
+			Every core project at a glance — no scrolling through full writeups.
+		</span>
+	</span>
+
+	<span
+		class="shrink-0 font-mono text-xl text-signal transition-transform group-hover:translate-x-1"
+		aria-hidden="true"
+	>
+		→
+	</span>
+</a>

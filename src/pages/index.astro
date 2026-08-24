@@ -3,7 +3,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import ProjectGrid from '../components/ProjectGrid.astro';
 import SectionHeading from '../components/SectionHeading.astro';
+import DeckBanner from '../components/DeckBanner.astro';
 import { getSortedProjects } from '../utils/projects';
+import { hasDeck } from '../utils/deck';
 import { SITE, SKILLS } from '../consts';
 
 const projects = await getSortedProjects();
@@ -23,21 +25,19 @@ const hasMore = projects.length > HOMEPAGE_LIMIT;
 <BaseLayout>
 	<Hero projectCount={projects.length} />
 
-	<!-- ── Work ─────────────────────────────────────────────────────────── -->
+	<!-- ── Projects ─────────────────────────────────────────────────────── -->
 	<section class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
 		<div class="flex flex-wrap items-end justify-between gap-6">
-			<SectionHeading id="work" index="01" eyebrow="Selected Work" title="Projects" />
-			{
-				hasMore && (
-					<a
-						href="/projects"
-						class="font-mono text-[11px] uppercase tracking-[0.12em] text-fog underline-offset-4 transition-colors hover:text-signal hover:underline"
-					>
-						All {projects.length} projects →
-					</a>
-				)
-			}
+			<SectionHeading id="projects" index="01" eyebrow="Selected" title="Projects" />
+			<a
+				href="/projects"
+				class="font-mono text-[11px] uppercase tracking-[0.12em] text-fog underline-offset-4 transition-colors hover:text-signal hover:underline"
+			>
+				{hasMore ? `All ${projects.length} projects` : 'Project archive'} →
+			</a>
 		</div>
+
+		{hasDeck() && <DeckBanner class="mt-10" />}
 
 		<div class="mt-10">
 			<ProjectGrid projects={highlights} />
@@ -52,7 +52,7 @@ const hasMore = projects.length > HOMEPAGE_LIMIT;
 			<div class="mt-10 grid gap-12 lg:grid-cols-[1.4fr_1fr]">
 				<div class="space-y-5 text-base leading-relaxed text-fog">
 					<p>
-						I'm an <span class="text-chalk">Engineering Physics</span> student at the
+						I'm an <span class="text-chalk">Engineering Physics</span> student at the{' '}
 						{SITE.school}, working toward a career in mechanical design. Eng Phys is
 						a broad program — mechanics, electronics, software, and physics — and I've
 						pointed that breadth squarely at
@@ -89,7 +89,7 @@ const hasMore = projects.length > HOMEPAGE_LIMIT;
 
 	<!-- ── Contact ──────────────────────────────────────────────────────── -->
 	<section class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
-		<SectionHeading id="contact" index="03" eyebrow="Contact" title="Let's talk" />
+		<SectionHeading id="contact" index="03" eyebrow="Contact" title="Let's connect!" />
 
 		<p class="mt-6 max-w-xl text-base leading-relaxed text-fog">
 			Open to mechanical engineering internships, co-ops, and design team work. The
@@ -115,7 +115,7 @@ const hasMore = projects.length > HOMEPAGE_LIMIT;
 				href={SITE.resume}
 				class="rounded-sm border border-line px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.12em] text-chalk transition-colors hover:border-signal/50 hover:text-signal"
 			>
-				Résumé ↗
+				Resume ↗
 			</a>
 		</div>
 	</section>

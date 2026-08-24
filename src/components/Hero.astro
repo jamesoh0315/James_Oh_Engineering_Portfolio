@@ -19,7 +19,7 @@ const { projectCount } = Astro.props;
 				></span>
 				<span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-signal"></span>
 			</span>
-			<span class="label-mono">Seeking Summer 2027 Internships</span>
+			<span class="label-mono">Seeking Spring / Summer 2027 Internships</span>
 		</div>
 
 		<h1
@@ -29,8 +29,8 @@ const { projectCount } = Astro.props;
 		</h1>
 
 		<p class="mt-6 max-w-2xl text-xl leading-snug text-chalk/90 sm:text-2xl">
-			{SITE.role} at the <span class="text-signal">{SITE.school}</span>, specializing
-			in {SITE.focus}.
+			{SITE.role} @ <span class="text-signal">{SITE.school}</span>, 
+			specializing in {SITE.focus}.
 		</p>
 
 		<p class="mt-6 max-w-2xl text-base leading-relaxed text-fog">
@@ -42,10 +42,10 @@ const { projectCount } = Astro.props;
 
 		<div class="mt-10 flex flex-wrap items-center gap-3">
 			<a
-				href="#work"
+				href="#projects"
 				class="rounded-sm bg-signal px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.12em] text-ink transition-opacity hover:opacity-90"
 			>
-				View Work
+				View Projects
 			</a>
 			<a
 				href="#contact"
@@ -57,7 +57,7 @@ const { projectCount } = Astro.props;
 				href={SITE.resume}
 				class="rounded-sm px-3 py-2.5 font-mono text-[11px] uppercase tracking-[0.12em] text-fog underline-offset-4 transition-colors hover:text-chalk hover:underline"
 			>
-				Résumé ↗
+				Resume ↗
 			</a>
 		</div>
 

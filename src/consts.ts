@@ -3,7 +3,7 @@
  */
 export const SITE = {
 	name: 'James Oh',
-	role: 'Engineering Physics Student',
+	role: 'Engineering Physics',
 	school: 'University of British Columbia',
 	focus: 'Mechanical Engineering',
 	description:
@@ -15,7 +15,7 @@ export const SITE = {
 } as const;
 
 export const NAV = [
-	{ href: '/#work', label: 'Work' },
+	{ href: '/#projects', label: 'Projects' },
 	{ href: '/#about', label: 'About' },
 	{ href: '/#contact', label: 'Contact' },
 ] as const;
