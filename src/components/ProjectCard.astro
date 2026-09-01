@@ -10,7 +10,7 @@ interface Props {
 }
 
 const { project, eager = false } = Astro.props;
-const { title, summary, tags, coverImage, coverAlt } = project.data;
+const { title, summary, tags, coverImage, coverAlt, coverPosition } = project.data;
 
 /** Cap visible tags so a long list can't break the card rhythm. */
 const MAX_TAGS = 4;
@@ -32,6 +32,7 @@ const overflow = tags.length - visibleTags.length;
 				sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
 				loading={eager ? 'eager' : 'lazy'}
 				class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+				style={`object-position: ${coverPosition};`}
 			/>
 			<div
 				class="pointer-events-none absolute inset-0 bg-gradient-to-t from-surface/70 via-transparent to-transparent"

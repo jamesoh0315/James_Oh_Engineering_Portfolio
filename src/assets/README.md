@@ -46,6 +46,16 @@ by its `order`.
 | `tags` | no | First 4 render, the rest collapse to `+N` |
 | `coverAlt` | no | Alt text — worth writing |
 
+### One file per project — watch for duplicate names
+
+`.md` and `.mdx` both work and can sit side by side in this folder. What does **not**
+work is two files with the same basename: `Foo.md` and `Foo.mdx` both resolve to the
+slug `foo`, one silently wins, and your edits to the other appear to do nothing.
+
+This bites most often when an editor still has the old file open after a rename and
+writes it back on save. If a change to a project seems to have no effect, check
+`ls src/content/projects/` for a duplicate before debugging anything else.
+
 ### Ordering
 
 `order` is just a number, lowest first — `order: 1` leads the grid. Renumber to

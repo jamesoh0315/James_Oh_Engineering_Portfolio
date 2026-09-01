@@ -15,7 +15,7 @@ import { glob } from 'astro/loaders';
  * live next to the real files without ever rendering as a project.
  */
 const projects = defineCollection({
-	loader: glob({ pattern: ['**/*.md', '!**/_*'], base: './src/content/projects' }),
+	loader: glob({ pattern: ['**/*.{md,mdx}', '!**/_*'], base: './src/content/projects' }),
 	schema: ({ image }) =>
 		z.object({
 			title: z.string(),
@@ -25,6 +25,10 @@ const projects = defineCollection({
 			// src/assets/ is written as: ../../assets/your-image.jpg
 			coverImage: image(),
 			coverAlt: z.string().default(''),
+			// How the cover is framed inside the card's 4:3 crop, as a CSS
+			// object-position value. '50% 50%' is centred; lower the first number to
+			// reveal more of the left edge, raise it to reveal more of the right.
+			coverPosition: z.string().default('center'),
 			// Lower numbers lead. Anything without an `order` falls to the end,
 			// where ties break on filename.
 			order: z.number().default(9999),

@@ -1,0 +1,48 @@
+---
+/**
+ * A short strip of headline facts, for the top of a project page.
+ *
+ * Project pages are read by people who skim. The narrative below earns the
+ * detail, but the result should be visible before anyone decides to scroll —
+ * this puts the numbers where a 20-second reader will actually see them.
+ *
+ * Mirrors the hero's spec strip so the two read as the same system.
+ *
+ *   <KeyFacts items={[
+ *     { label: 'Changeover time', value: '30 min → under 5' },
+ *   ]} />
+ */
+
+interface Fact {
+	label: string;
+	value: string;
+	/** Renders the value in the accent colour — use for the headline number. */
+	accent?: boolean;
+}
+
+interface Props {
+	items: Fact[];
+}
+
+const { items } = Astro.props;
+---
+
+<dl
+	class="not-prose my-8 grid grid-cols-1 gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-3"
+>
+	{
+		items.map((fact) => (
+			<div class="bg-ink px-5 py-4">
+				<dt class="label-mono">{fact.label}</dt>
+				<dd
+					class:list={[
+						'mt-1.5 text-sm font-medium',
+						fact.accent && 'font-mono text-signal',
+					]}
+				>
+					{fact.value}
+				</dd>
+			</div>
+		))
+	}
+</dl>

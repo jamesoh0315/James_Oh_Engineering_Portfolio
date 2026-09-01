@@ -1,0 +1,90 @@
+---
+import { Image } from 'astro:assets';
+
+/**
+ * One or more images and/or videos in a row, sharing a single caption.
+ *
+ * Items are sized by HEIGHT, not width. That's deliberate: shop photos, CAD
+ * exports, and phone video arrive at whatever resolution they arrive at, and
+ * matching heights keeps a row visually balanced without upscaling the smallest
+ * one. Width is capped at the container regardless, so a very wide strip (a 4:1
+ * section view, say) shrinks to fit instead of overflowing the prose column.
+ *
+ * Images come from src/assets (optimised at build). Videos live in public/ and
+ * are referenced by URL, since Astro's image pipeline doesn't process video.
+ *
+ *   <Figures caption="Print iterations" wide height={180} items={[
+ *     { src: printV1, alt: 'First printed prototype' },
+ *     { video: '/media/PrintV3.mp4', alt: 'Twist-to-lock demonstration' },
+ *   ]} />
+ */
+
+interface ImageItem {
+	src: ImageMetadata;
+	alt: string;
+}
+
+interface VideoItem {
+	/** URL under public/, e.g. '/media/clip.mp4'. */
+	video: string;
+	/** Still frame shown before the clip loads — avoids an empty box. */
+	poster?: string;
+	alt: string;
+}
+
+type Item = ImageItem | VideoItem;
+
+interface Props {
+	items: Item[];
+	caption?: string;
+	/** Max row height in px. Width still caps at the container. */
+	height?: number;
+	/** Break out past the prose column on large screens, for busy rows. */
+	wide?: boolean;
+}
+
+const { items, caption, height = 260, wide = false } = Astro.props;
+
+const isVideo = (item: Item): item is VideoItem => 'video' in item;
+---
+
+<figure class:list={['not-prose my-10', wide && 'lg:-mx-24 xl:-mx-40']}>
+	<div class="flex flex-wrap items-end justify-center gap-4">
+		{
+			items.map((item) => (
+				<div class="max-w-full overflow-hidden rounded-md border border-line bg-surface p-1.5">
+					{isVideo(item) ? (
+						<video
+							src={item.video}
+							poster={item.poster}
+							controls
+							autoplay
+							muted
+							loop
+							playsinline
+							aria-label={item.alt}
+							class="h-auto w-auto max-w-full rounded-sm"
+							style={`max-height: ${height}px;`}
+						/>
+					) : (
+						<Image
+							src={item.src}
+							alt={item.alt}
+							loading="lazy"
+							class="h-auto w-auto max-w-full rounded-sm object-contain"
+							style={`max-height: ${height}px;`}
+						/>
+					)}
+				</div>
+			))
+		}
+	</div>
+
+	{
+		caption && (
+			<figcaption class="mx-auto mt-4 max-w-2xl text-center font-mono text-[13px] leading-relaxed tracking-[0.02em] text-chalk/70">
+				{caption}
+			</figcaption>
+		)
+	}
+</figure>

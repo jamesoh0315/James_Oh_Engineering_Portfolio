@@ -1,0 +1,232 @@
+---
+title: "Hybrid Spindle Liner"
+order: 1
+summary: "Quick-change spindle liner apparatus for CNC Lathes, combining polyurethane and metal spindle liners."
+tags: ["Mechanism Design", "Engineering Drawing", "Machining", "Creo", "3D printing"]
+coverImage: ../../assets/Hybrid/Cover.png
+coverPosition: "10% 50%"
+coverAlt: "Design CAD view"
+---
+
+import Figures from '../../components/Figures.astro';
+import KeyFacts from '../../components/KeyFacts.astro';
+import dryIce from '../../assets/Hybrid/Dry-Ice.png';
+import extraction from '../../assets/Hybrid/Extraction.png';
+import v1 from '../../assets/Hybrid/V1.png';
+import v1face from '../../assets/Hybrid/V1-face.png';
+import v2 from '../../assets/Hybrid/V2.png';
+import v3 from '../../assets/Hybrid/V3.png';
+import printV1 from '../../assets/Hybrid/PrintV1.jpeg';
+import printV2 from '../../assets/Hybrid/PrintV2.png';
+import depth from '../../assets/Hybrid/Depth.jpg';
+import bore from '../../assets/Hybrid/Bore.JPG';
+import jfberns from '../../assets/Hybrid/JFBERNS.png';
+import metalLiner from '../../assets/Hybrid/MetalLiner.jpg';
+import section from '../../assets/Hybrid/Section.png';
+import toolCad from '../../assets/Hybrid/ToolCAD.png';
+import toolUse from '../../assets/Hybrid/ToolUse.png';
+import toolPic from '../../assets/Hybrid/ToolPic.png';
+import finalProto from '../../assets/Hybrid/FinalProto.png';
+import chuckTest from '../../assets/Hybrid/ChuckTest.JPG';
+import rearTest from '../../assets/Hybrid/RearTest.JPG';
+import draw1 from '../../assets/Hybrid/Draw1.png';
+import draw2 from '../../assets/Hybrid/Draw2.png';
+import draw3 from '../../assets/Hybrid/Draw3.png';
+
+During my 4 month intership term at **Dometic Marine**, I faced a problem which a CNC lathe's polyurethane spindle liner absorbs coolant over time, swells, and
+**seizes in the spindle**. Freeing one takes dry ice, partial disassembly of the machine,
+and over half an hour of downtime. I designed a **hybrid liner** that splits the
+assembly in two, so the removable section pulls out through the chuck in **under five
+minutes**, no disassembly, no dry ice.
+
+## Overview
+### The Problem
+
+**Spindle liners** reduce the inner diameter of a CNC lathe spindle to closely match the
+bar stock being machined, suppressing vibration and allowing for tighter tolerances.
+Polyurethane liners are preferred over metal ones for their **superior vibration
+damping** and the protection they give to bar stock surfaces. Over time, however,
+they **absorb coolant, swell, and seize** inside the spindle.
+
+Freeing a seized liner takes **dry ice** and **partial disassembly** of the machine — a
+procedure that costs **hours of downtime** on every changeover.
+
+<Figures
+	caption="Original liner removal procedure."
+	items={[
+		{ src: dryIce, alt: 'Dry ice being loaded into the lathe spindle bore to shrink a seized liner' },
+		{ src: extraction, alt: 'A seized polyurethane liner being drawn out of the machine' },
+	]}
+/>
+
+### The Concept
+
+The hybrid spindle liner splits the assembly in two: a **metal liner that stays
+permanently** in the spindle, and a **short removable polyurethane section** at the
+front. Placing the polyurethane nearer the chuck means the worn section can be drawn out
+through the chuck itself: changeovers happen from the front of the machine,
+**without disassembly or dry ice**.
+
+### Design Constraints
+
+- All mechanisms must **fit within the lathe's inner drawtube diameter**.
+- The polyurethane liner section must be accessible from the chuck side **without machine disassembly.**
+- Installation and removal must work through a quick-change mechanism **without bolts**, as access to the inner drawtube is very limited.
+- Bar stock being machined must **only contact the polyurethane** liner.
+
+
+## Approach
+### Initial Concept Generation
+
+Before opening CAD, I worked through concepts on paper. The **coupling interface**
+between the polyurethane and metal sections was the decision everything else
+depended on, so I surveyed existing mechanisms suited to the application and weighed
+each against **operational viability, reliability, and the constraints above**.
+
+Three concepts came out of that process.
+
+<Figures
+	height={155}
+	caption="V1 — A threaded interface handles installation and removal. Rejected: spindle rotation risks the joint backing itself off."
+	items={[
+		{ src: v1, alt: 'Section view of the V1 threaded coupling between the polyurethane and metal liner' },
+		{ src: v1face, alt: 'Face view of the V1 coupling flange showing four bolt holes' },
+	]}
+/>
+
+<Figures
+	caption="V2 — An O-ring resists vibration loosening and seals against chip ingress. Rejected: the metal coupling protrudes past the polyurethane."
+	items={[
+		{ src: v2, alt: 'Section view of the V2 coupling with an added O-ring seal' },
+	]}
+/>
+
+<Figures
+	caption="V3 — A bayonet coupling removes threads from the mechanism entirely, and keeps bar stock in contact with the polyurethane alone."
+	items={[
+		{ src: v3, alt: 'Section view of the V3 bayonet coupling' },
+	]}
+/>
+
+### 3D Print Prototypes
+
+To build a proof of concept, I prototyped and iterated the bayonet coupling using 3D
+printing. Across more than three versions I varied the **J-slot geometry**, the spring,
+and the locking pin position, working toward a positive **twist-to-lock feel**.
+
+I designed for **DFM and serviceability** alongside function: I shaped one component to keep
+chips out of the inner spring, and the J-slot stays **machinable on a 4-axis CNC**.
+
+<Figures
+	wide
+	height={245}
+	caption="Bayonet coupling print iterations, oldest at left. Each version reworked the J-slot, spring, and pin placement to tune the twist-to-lock motion."
+	items={[
+		{ src: printV1, alt: 'First printed prototype of the bayonet coupling' },
+		{ src: printV2, alt: 'Second printed prototype with a revised J-slot' },
+		{ video: '/media/PrintV3.mp4', poster: '/media/PrintV3-poster.jpg', alt: 'Third prototype demonstrating the twist-to-lock action' },
+	]}
+/>
+
+### Assembly Planning
+
+With the coupling mechanism settled, I turned to fitting the assembly into the
+machine. That meant measuring the **inner drawtube diameter, its length, and the
+depth of the chuck**, then cross-checking them against the
+**manufacturer's specifications**. Those numbers set the **total assembly length**
+and the individual dimensions of the polyurethane and metal sections.
+
+<Figures
+	wide
+	height={300}
+	caption="Machine measurements — Nakamura Tome SC-300II: drawtube length and inner diameter."
+	items={[
+		{ src: depth, alt: 'Tape measure recording the depth from the chuck face on the lathe' },
+		{ src: bore, alt: 'Measuring the drawtube bore diameter through the chuck, with the red polyurethane liner visible inside' },
+	]}
+/>
+
+With those dimensions set, I ran the process myself — **request for quote, drawing
+verification, and purchase order** — working directly with the metal liner supplier,
+J.F. Berns.
+
+<Figures
+	wide
+	height={300}
+	caption="Metal liner CAD and received product."
+	items={[
+		{ src: jfberns, alt: 'Metal liner CAD' },
+		{ src: metalLiner, alt: 'The delivered metal spindle liner, black finished with machined support rings' },
+	]}
+/>
+
+### Final Assembly Overview
+
+The finished assembly: the permanent metal liner running the length of the spindle,
+with the removable polyurethane section coupled at the chuck end.
+
+<Figures
+	wide
+	height={400}
+	caption="Final assembly layout."
+	items={[
+		{ video: '/media/LayoutVid.mp4', poster: '/media/LayoutVid-poster.jpg', alt: 'Animated walkthrough of the full assembly layout' },
+		{ src: section, alt: 'Section view through the complete hybrid liner assembly' },
+	]}
+/>
+
+
+### Installation / Removal Tool
+
+To assist with installation and removal, I designed and fabricated a custom
+tool. It pairs a **3D-printed handle and end fitting** with a length of **production
+scrap rod** that I post-processed in the machine shop, incurring **no extra material cost.**
+
+<Figures
+	wide
+	height={170}
+	caption="Custom installation and removal tool CAD design and the fabricated tool."
+	items={[
+		{ src: toolCad, alt: 'CAD model of the custom installation and removal tool' },
+		{ src: toolUse, alt: 'CAD view showing the tool engaging the liner assembly' },
+		{ src: toolPic, alt: 'The fabricated tool: 3D-printed handle and end fitting on a scrap rod' },
+	]}
+/>
+
+## Outcome
+
+Before the end of my internship term, I delivered a functional prototype projected to
+cut spindle liner changeovers **from over 30 minutes to under 5**. Making the
+polyurethane section modular also opened a second opportunity: with that section now
+customizable, its internal bore can be profiled into a nozzle cone to improve
+**coolant flow**.
+
+<Figures
+	wide
+	height={300}
+	caption="Final prototype assembly, and fit testing in the machine."
+	items={[
+		{ src: finalProto, alt: 'The completed hybrid spindle liner prototype assembly' },
+		{ src: chuckTest, alt: 'Fit test of the assembly at the chuck end of the lathe' },
+		{ src: rearTest, alt: 'Fit test of the assembly at the rear of the spindle' },
+	]}
+/>
+
+The machined version of the bayonet coupling was still outstanding when my four-month
+term ended. However, I am proud to say that the branch GM **recommended the design be
+filed for a patent** at the end-of-term presentation.
+
+I left the work ready to pick up: **part drawings released for subcontract machining**
+of the coupling, alongside internal documentation covering the design rationale and
+the next steps forward.
+
+<Figures
+	wide
+	height={200}
+	caption="Coupling part drawings, released for subcontract machining."
+	items={[
+		{ src: draw1, alt: 'Manufacturing drawing for the first bayonet coupling component' },
+		{ src: draw2, alt: 'Manufacturing drawing for the second bayonet coupling component' },
+		{ src: draw3, alt: 'Manufacturing drawing for the third bayonet coupling component' },
+	]}
+/>
