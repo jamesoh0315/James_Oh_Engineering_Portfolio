@@ -2,20 +2,24 @@
 @plugin "@tailwindcss/typography";
 
 /* ---------------------------------------------------------------------------
-   Design tokens. Tailwind v4 is configured here in CSS, not in a JS config
-   file. Anything defined in @theme becomes a utility automatically, e.g.
-   --color-signal -> bg-signal, text-signal, border-signal.
+   Design tokens. Tailwind v4 is configured here in CSS, not a JS config file.
+   Anything in @theme becomes a utility automatically: --color-signal gives you
+   bg-signal, text-signal, border-signal.
+
+   Palette: deep forest ground, bone type, one amber accent. Token names are
+   deliberately unchanged from the previous system so every component kept its
+   colour role through the migration.
    --------------------------------------------------------------------------- */
 @theme {
-	--color-ink: #08090b;      /* page background       */
-	--color-surface: #101216;  /* cards, raised panels  */
-	--color-line: #20242b;     /* hairline borders      */
-	--color-fog: #8b929c;      /* muted / secondary text*/
-	--color-chalk: #e9ecf1;    /* primary text          */
-	--color-signal: #38bdf8;   /* the one accent        */
+	--color-ink: #111a15;      /* page ground            */
+	--color-surface: #18231d;  /* raised panels, plates  */
+	--color-line: #26332c;     /* hairline rules         */
+	--color-fog: #93a099;      /* secondary text         */
+	--color-chalk: #eae7dd;    /* primary text (bone)    */
+	--color-signal: #e0a63c;   /* the one accent (amber) */
+	--color-onsignal: #17140b; /* text on the accent     */
 
-	--font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
-	--font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+	--font-sans: Outfit, ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
 @layer base {
@@ -33,8 +37,8 @@
 	}
 
 	::selection {
-		background-color: color-mix(in oklab, var(--color-signal) 30%, transparent);
-		color: var(--color-chalk);
+		background-color: var(--color-signal);
+		color: var(--color-onsignal);
 	}
 
 	:focus-visible {
@@ -45,26 +49,65 @@
 }
 
 @layer components {
-	/* Faint blueprint grid used behind the hero. Pure CSS — no image asset. */
-	.blueprint-grid {
-		background-image:
-			linear-gradient(to right, var(--color-line) 1px, transparent 1px),
-			linear-gradient(to bottom, var(--color-line) 1px, transparent 1px);
-		background-size: 64px 64px;
-		mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 20%, transparent 75%);
+	/* Shared button shapes. One radius scale across the site: 6px. */
+	.btn {
+		display: inline-block;
+		border-radius: 6px;
+		padding: 0.8rem 1.5rem;
+		font-size: 0.93rem;
+		font-weight: 600;
+		text-decoration: none;
+		transition:
+			transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+			filter 0.2s,
+			border-color 0.2s,
+			color 0.2s;
 	}
 
-	/* Small monospace label used for section indices and metadata. */
-	.label-mono {
-		font-family: var(--font-mono);
-		font-size: 0.6875rem;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-		color: var(--color-fog);
+	.btn:active {
+		transform: scale(0.98);
+	}
+
+	.btn-solid {
+		background-color: var(--color-signal);
+		color: var(--color-onsignal);
+	}
+
+	.btn-solid:hover {
+		filter: brightness(1.08);
+	}
+
+	.btn-ghost {
+		border: 1px solid var(--color-line);
+		color: var(--color-chalk);
+	}
+
+	.btn-ghost:hover {
+		border-color: var(--color-chalk);
+	}
+
+	/* Section titles. No eyebrows, no section numbers: the heading carries it. */
+	.h-section {
+		font-weight: 700;
+		font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+		letter-spacing: -0.04em;
+		margin: 0;
+	}
+
+	/* One authored entrance, reused rather than re-invented per section. */
+	.rise {
+		animation: rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
 	}
 }
 
-/* Tune @tailwindcss/typography to the dark palette for project detail bodies. */
+@keyframes rise {
+	from {
+		opacity: 0;
+		transform: translateY(16px);
+	}
+}
+
+/* Project body copy on detail pages, tuned to the palette. */
 @layer utilities {
 	.prose-engineering {
 		--tw-prose-invert-body: var(--color-fog);

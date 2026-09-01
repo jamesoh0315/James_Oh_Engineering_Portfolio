@@ -1,36 +1,31 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import ProjectGrid from '../../components/ProjectGrid.astro';
+import ProjectRows from '../../components/ProjectRows.astro';
 import DeckBanner from '../../components/DeckBanner.astro';
-import SectionHeading from '../../components/SectionHeading.astro';
 import { getSortedProjects } from '../../utils/projects';
 import { hasDeck } from '../../utils/deck';
 
 const projects = await getSortedProjects();
 
-/** Hidden until slides actually exist, so it never links to an empty page. */
+/** Hidden until slides exist, so it never links to an empty page. */
 const showDeckBanner = hasDeck();
 ---
 
 <BaseLayout
 	title="Projects"
-	description="Mechanical design and fabrication projects — CAD, analysis, prototyping, and machining."
+	description="Mechanical design and fabrication projects: CAD, analysis, prototyping, and machining."
 >
-	<section class="mx-auto max-w-6xl px-6 py-16 sm:py-20">
-		<SectionHeading
-			index={String(projects.length).padStart(2, '0')}
-			eyebrow="Archive"
-			title="All Projects"
-		/>
+	<section class="mx-auto max-w-[1300px] px-5 py-12 sm:px-8 sm:py-16 lg:px-12">
+		<h1 class="h-section">All Projects</h1>
 
-		<p class="mt-6 max-w-xl text-base leading-relaxed text-fog">
-			The full set — mechanical design, analysis, and the fabrication that followed.
+		<p class="mt-4 max-w-[52ch] text-[1.02rem] leading-relaxed text-fog">
+			The full set: mechanical design, analysis, and the fabrication that followed.
 		</p>
 
-		{showDeckBanner && <DeckBanner class="mt-10" />}
+		{showDeckBanner && <DeckBanner class="mt-8" />}
 
-		<div class="mt-12">
-			<ProjectGrid projects={projects} eagerCount={3} />
+		<div class="mt-4">
+			<ProjectRows projects={projects} eagerCount={1} />
 		</div>
 	</section>
 </BaseLayout>

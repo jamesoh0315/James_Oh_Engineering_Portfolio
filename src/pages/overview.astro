@@ -1,7 +1,6 @@
 ---
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import SectionHeading from '../components/SectionHeading.astro';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { getDeckSlides } from '../utils/deck';
@@ -26,13 +25,13 @@ const hasPdf = existsSync(path.join(process.cwd(), 'public', 'overview.pdf'));
 >
 	<section class="mx-auto max-w-5xl px-6 py-16 sm:py-20">
 		<div class="flex flex-wrap items-end justify-between gap-6">
-			<SectionHeading index="00" eyebrow="Fast Track" title="Overview" />
+			<h1 class="h-section">Overview</h1>
 
 			{
 				slides.length > 0 && hasPdf && (
 					<a
 						href={PDF_HREF}
-						class="rounded-sm border border-line px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.12em] text-chalk transition-colors hover:border-signal/50 hover:text-signal"
+						class="btn btn-ghost"
 					>
 						Download PDF ↓
 					</a>
@@ -41,7 +40,7 @@ const hasPdf = existsSync(path.join(process.cwd(), 'public', 'overview.pdf'));
 		</div>
 
 		<p class="mt-6 max-w-xl text-base leading-relaxed text-fog">
-			The short version — my core projects at a glance, about three minutes to skim.
+			The short version: my core projects at a glance, about three minutes to skim.
 			{
 				slides.length > 0 && (
 					<>
@@ -61,19 +60,17 @@ const hasPdf = existsSync(path.join(process.cwd(), 'public', 'overview.pdf'));
 
 		{
 			slides.length === 0 ? (
-				<div class="mt-12 rounded-md border border-dashed border-line p-10 text-center">
-					<p class="font-mono text-xs tracking-[0.1em] text-fog">
-						No slides yet — export them to src/assets/deck/
-					</p>
+				<div class="mt-12 rounded-lg border border-dashed border-line p-10 text-center">
+					<p class="text-sm text-fog">No slides yet. Export them to src/assets/deck/</p>
 					<p class="mt-3 text-sm text-fog/70">
-						See <span class="font-mono text-fog">src/assets/deck/README.md</span> for
+						See <span class="text-chalk">src/assets/deck/README.md</span> for
 						the export steps.
 					</p>
 				</div>
 			) : (
 				<div class="mt-12 space-y-6">
 					{slides.map((slide, i) => (
-						<figure class="overflow-hidden rounded-md border border-line bg-surface">
+						<figure class="overflow-hidden rounded-lg border border-line bg-surface">
 							<Image
 								src={slide}
 								alt={`Overview slide ${i + 1}`}
@@ -91,13 +88,13 @@ const hasPdf = existsSync(path.join(process.cwd(), 'public', 'overview.pdf'));
 		{
 			slides.length > 0 && (
 				<div class="mt-14 border-t border-line pt-8">
-					<p class="label-mono">Want the detail?</p>
+					<p class="text-[0.85rem] text-fog">Want the detail?</p>
 					<a
 						href="/projects"
 						class="group mt-3 inline-flex items-baseline gap-2 text-lg font-semibold tracking-tight transition-colors hover:text-signal"
 					>
 						Full project writeups
-						<span class="font-mono text-sm text-signal transition-transform group-hover:translate-x-0.5">
+						<span class="text-sm text-signal transition-transform group-hover:translate-x-0.5">
 							→
 						</span>
 					</a>

@@ -1,97 +1,100 @@
 ---
 import { Image } from 'astro:assets';
 import { SITE } from '../consts';
-import headshot from '../assets/profile-headshot.jpg';
+import chuck from '../assets/Hybrid/ChuckTest.JPG';
+import liner from '../assets/Hybrid/MetalLiner.jpg';
 
-interface Props {
-	projectCount: number;
-}
+/**
+ * Hero previews.
+ *
+ * The first entry is the main plate; everything after renders as an overlapping
+ * inset at its lower left. Adding a preview is another entry here, and the
+ * insets stack.
+ *
+ * The plate is capped and pushed to the right of its column so the insets hang
+ * into the gutter between the two columns rather than over the headline.
+ */
+const previews = [
+	{
+		src: chuck,
+		alt: 'Hybrid liner assembly fit tested at the chuck end of a CNC lathe',
+		caption: null,
+	},
+	{
+		src: liner,
+		alt: 'The delivered metal spindle liner',
+		caption: 'Metal liner as delivered',
+	},
+];
 
-const { projectCount } = Astro.props;
+const [plate, ...insets] = previews;
 ---
 
-<section class="relative overflow-hidden border-b border-line">
-	<div class="blueprint-grid absolute inset-0 opacity-60" aria-hidden="true"></div>
-
-	<div class="relative mx-auto max-w-6xl px-6 pb-20 pt-20 sm:pb-28 sm:pt-28">
-		<div class="grid items-center gap-12 lg:grid-cols-[1fr_320px] lg:gap-16">
+<section class="mx-auto max-w-[1300px] px-5 pb-12 pt-10 sm:px-8 sm:pb-16 sm:pt-14 lg:px-12">
+	<div class="grid items-center gap-10 lg:grid-cols-[1.2fr_0.85fr] lg:gap-14">
 		<div>
-		<div class="flex items-center gap-3">
-			<span class="relative flex h-1.5 w-1.5" aria-hidden="true">
-				<span
-					class="absolute inline-flex h-full w-full animate-ping rounded-full bg-signal opacity-75"
-				></span>
-				<span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-signal"></span>
-			</span>
-			<span class="label-mono">Seeking Spring / Summer 2027 Internships</span>
-		</div>
+			<p class="rise mb-5 inline-flex items-center gap-2.5 text-[0.92rem] text-fog">
+				<span class="block h-2 w-2 flex-none bg-signal" aria-hidden="true"></span>
+				Seeking Spring / Summer 2027 internships
+			</p>
 
-		<h1
-			class="mt-7 max-w-4xl text-5xl font-semibold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl"
-		>
-			{SITE.name}
-		</h1>
-
-		<p class="mt-6 max-w-2xl text-xl leading-snug text-chalk/90 sm:text-2xl">
-			{SITE.role} @ <span class="text-signal">{SITE.school}</span>, 
-			specializing in {SITE.focus}.
-		</p>
-
-		<p class="mt-6 max-w-2xl text-base leading-relaxed text-fog">
-			I design, analyze, and build mechanical hardware — from clamp preload
-			calculations and FEA through to machining and fit-up on the bench. Engineering
-			Physics gives me the analysis; the shop keeps me honest about whether the part
-			actually works.
-		</p>
-
-		<div class="mt-10 flex flex-wrap items-center gap-3">
-			<a
-				href="#projects"
-				class="rounded-sm bg-signal px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.12em] text-ink transition-opacity hover:opacity-90"
+			<h1
+				class="rise text-[clamp(3rem,8vw,5.2rem)] font-extrabold leading-[0.95] tracking-[-0.045em] [animation-delay:60ms]"
 			>
-				View Projects
-			</a>
-			<a
-				href="#contact"
-				class="rounded-sm border border-line px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.12em] text-chalk transition-colors hover:border-signal/50 hover:text-signal"
+				{SITE.name}
+			</h1>
+
+			<p
+				class="rise mt-6 max-w-[26ch] text-[clamp(1.1rem,1.75vw,1.4rem)] leading-[1.32] tracking-[-0.02em] [animation-delay:120ms]"
 			>
-				Get in Touch
-			</a>
+				{SITE.role} @ {SITE.school}, specializing in <b class="font-semibold text-signal"
+					>{SITE.focus}</b
+				>.
+			</p>
+
+			<div class="rise mt-8 flex flex-wrap gap-2.5 [animation-delay:180ms]">
+				<a class="btn btn-solid" href="#projects">View projects</a>
+				<a class="btn btn-ghost" href="#contact">Get in touch</a>
+			</div>
 		</div>
 
-		<!-- Spec strip: reads like a title block on a drawing. -->
-		<dl
-			class="mt-16 grid max-w-2xl grid-cols-2 gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-3"
-		>
-			<div class="bg-ink px-5 py-4">
-				<dt class="label-mono">Program</dt>
-				<dd class="mt-1.5 text-sm font-medium">Engineering Physics</dd>
-			</div>
-			<div class="bg-ink px-5 py-4">
-				<dt class="label-mono">Focus</dt>
-				<dd class="mt-1.5 text-sm font-medium">{SITE.focus}</dd>
-			</div>
-			<div class="col-span-2 bg-ink px-5 py-4 sm:col-span-1">
-				<dt class="label-mono">Projects</dt>
-				<dd class="mt-1.5 font-mono text-sm font-medium text-signal">
-					{String(projectCount).padStart(2, '0')}
-				</dd>
-			</div>
-		</dl>
-		</div>
-
-			<!-- Portrait shown at its natural 2:3 ratio — no crop, no zoom. The full
-			     frame is downscaled from a 2496px-wide source, which keeps it sharp. -->
-			<div class="mx-auto w-full max-w-[280px] overflow-hidden rounded-md border border-line bg-surface lg:mx-0 lg:max-w-none">
+		<div class="rise relative mx-auto w-full max-w-[22rem] lg:mx-0 lg:ml-auto lg:max-w-[26rem] [animation-delay:120ms]">
+			<figure class="m-0 aspect-[4/3] overflow-hidden rounded-lg bg-surface lg:aspect-[3/4]">
 				<Image
-					src={headshot}
-					alt={`${SITE.name} — ${SITE.role} student at ${SITE.school}`}
-					widths={[320, 640, 960]}
-					sizes="(min-width: 1024px) 320px, 280px"
+					src={plate.src}
+					alt={plate.alt}
+					widths={[500, 900, 1400]}
+					sizes="(min-width: 1024px) 26rem, 90vw"
 					loading="eager"
-					class="h-auto w-full"
+					class="h-full w-full object-cover"
 				/>
-			</div>
+			</figure>
+
+			{
+				insets.length > 0 && (
+					<div class="absolute -left-12 bottom-6 hidden w-[9.5rem] space-y-2 lg:block">
+						{insets.map((item) => (
+							<div class="rounded-lg bg-ink p-1.5">
+								<figure class="m-0 aspect-[3/4] overflow-hidden rounded">
+									<Image
+										src={item.src}
+										alt={item.alt}
+										widths={[260, 520]}
+										sizes="9.5rem"
+										loading="eager"
+										class="h-full w-full object-cover"
+									/>
+								</figure>
+								{item.caption && (
+									<figcaption class="pt-1.5 text-[0.74rem] leading-snug text-fog">
+										{item.caption}
+									</figcaption>
+								)}
+							</div>
+						))}
+					</div>
+				)
+			}
 		</div>
 	</div>
 </section>

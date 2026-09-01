@@ -1,0 +1,26 @@
+---
+import ProjectRow from './ProjectRow.astro';
+import type { Project } from '../utils/projects';
+
+interface Props {
+	projects: Project[];
+	/** Number of leading rows to load eagerly. */
+	eagerCount?: number;
+}
+
+const { projects, eagerCount = 1 } = Astro.props;
+---
+
+{
+	projects.length === 0 ? (
+		<p class="rounded-lg border border-dashed border-line p-10 text-center text-sm text-fog">
+			No projects yet. Add a markdown file to src/content/projects/
+		</p>
+	) : (
+		<div>
+			{projects.map((project, i) => (
+				<ProjectRow project={project} eager={i < eagerCount} />
+			))}
+		</div>
+	)
+}

@@ -37,12 +37,12 @@ const { Content } = await render(project);
 			<div class="mx-auto max-w-4xl px-6 pb-12 pt-12 sm:pt-16">
 				<a
 					href="/projects"
-					class="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-fog transition-colors hover:text-signal"
+					class="inline-flex items-center gap-2 text-[0.9rem] text-fog transition-colors hover:text-signal"
 				>
 					← All Projects
 				</a>
 
-				<h1 class="mt-8 text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
+				<h1 class="mt-8 text-[clamp(2.1rem,4.5vw,3.2rem)] font-bold leading-[1.04] tracking-[-0.04em]">
 					{title}
 				</h1>
 
@@ -63,7 +63,7 @@ const { Content } = await render(project);
 		<!-- Cover shows at its natural aspect ratio — unlike the cards, there's no
 		     grid to align to, so nothing gets cropped out of a CAD render. -->
 		<div class="mx-auto max-w-5xl px-6 pt-12">
-			<figure class="overflow-hidden rounded-md border border-line bg-surface">
+			<figure class="overflow-hidden rounded-lg border border-line bg-surface">
 				<Image
 					src={coverImage}
 					alt={coverAlt || title}
@@ -82,7 +82,7 @@ const { Content } = await render(project);
 					prose-headings:font-semibold prose-headings:tracking-tight
 					prose-h2:mt-14 prose-h2:border-t prose-h2:border-line prose-h2:pt-8
 					prose-h2:text-2xl prose-h2:scroll-mt-24
-					prose-h3:mt-10 prose-h3:text-base prose-h3:uppercase prose-h3:tracking-[0.1em]
+					prose-h3:mt-10 prose-h3:text-[1.05rem] prose-h3:font-semibold prose-h3:tracking-[-0.01em]
 					prose-h3:text-signal
 					prose-p:leading-relaxed
 					prose-strong:font-semibold
@@ -103,9 +103,9 @@ const { Content } = await render(project);
 					{prev ? (
 						<a
 							href={`/projects/${prev.id}`}
-							class="group rounded-md border border-line bg-surface p-5 transition-colors hover:border-signal/40"
+							class="group rounded-lg border border-line bg-surface p-5 transition-colors hover:border-signal/50"
 						>
-							<span class="label-mono">← Previous</span>
+							<span class="text-[0.8rem] text-fog">← Previous</span>
 							<span class="mt-2 block text-sm font-medium transition-colors group-hover:text-signal">
 								{prev.data.title}
 							</span>
@@ -117,9 +117,9 @@ const { Content } = await render(project);
 					{next && (
 						<a
 							href={`/projects/${next.id}`}
-							class="group rounded-md border border-line bg-surface p-5 transition-colors hover:border-signal/40 sm:text-right"
+							class="group rounded-lg border border-line bg-surface p-5 transition-colors hover:border-signal/50 sm:text-right"
 						>
-							<span class="label-mono">Next →</span>
+							<span class="text-[0.8rem] text-fog">Next →</span>
 							<span class="mt-2 block text-sm font-medium transition-colors group-hover:text-signal">
 								{next.data.title}
 							</span>

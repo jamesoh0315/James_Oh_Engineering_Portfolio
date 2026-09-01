@@ -15,7 +15,7 @@ import { Image } from 'astro:assets';
  *
  *   <Figures caption="Print iterations" wide height={180} items={[
  *     { src: printV1, alt: 'First printed prototype' },
- *     { video: '/media/PrintV3.mp4', alt: 'Twist-to-lock demonstration' },
+ *     { video: '/media/PrintV3.mp4', alt: 'Twist to lock demonstration' },
  *   ]} />
  */
 
@@ -27,7 +27,7 @@ interface ImageItem {
 interface VideoItem {
 	/** URL under public/, e.g. '/media/clip.mp4'. */
 	video: string;
-	/** Still frame shown before the clip loads — avoids an empty box. */
+	/** Still frame shown before the clip loads, avoids an empty box. */
 	poster?: string;
 	alt: string;
 }
@@ -52,7 +52,7 @@ const isVideo = (item: Item): item is VideoItem => 'video' in item;
 	<div class="flex flex-wrap items-end justify-center gap-4">
 		{
 			items.map((item) => (
-				<div class="max-w-full overflow-hidden rounded-md border border-line bg-surface p-1.5">
+				<div class="max-w-full overflow-hidden rounded-lg border border-line bg-surface p-1.5">
 					{isVideo(item) ? (
 						<video
 							src={item.video}
@@ -63,7 +63,7 @@ const isVideo = (item: Item): item is VideoItem => 'video' in item;
 							loop
 							playsinline
 							aria-label={item.alt}
-							class="h-auto w-auto max-w-full rounded-sm"
+							class="h-auto w-auto max-w-full rounded"
 							style={`max-height: ${height}px;`}
 						/>
 					) : (
@@ -71,7 +71,7 @@ const isVideo = (item: Item): item is VideoItem => 'video' in item;
 							src={item.src}
 							alt={item.alt}
 							loading="lazy"
-							class="h-auto w-auto max-w-full rounded-sm object-contain"
+							class="h-auto w-auto max-w-full rounded object-contain"
 							style={`max-height: ${height}px;`}
 						/>
 					)}
@@ -82,7 +82,7 @@ const isVideo = (item: Item): item is VideoItem => 'video' in item;
 
 	{
 		caption && (
-			<figcaption class="mx-auto mt-4 max-w-2xl text-center font-mono text-[13px] leading-relaxed tracking-[0.02em] text-chalk/70">
+			<figcaption class="mx-auto mt-4 max-w-2xl text-center text-[0.9rem] leading-relaxed text-fog">
 				{caption}
 			</figcaption>
 		)

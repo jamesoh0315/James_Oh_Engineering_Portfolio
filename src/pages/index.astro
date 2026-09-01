@@ -1,8 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
-import ProjectGrid from '../components/ProjectGrid.astro';
-import SectionHeading from '../components/SectionHeading.astro';
+import ProjectRows from '../components/ProjectRows.astro';
 import DeckBanner from '../components/DeckBanner.astro';
 import { getSortedProjects } from '../utils/projects';
 import { hasDeck } from '../utils/deck';
@@ -13,99 +12,94 @@ const projects = await getSortedProjects();
 /** Homepage shows the first six in `order`; the archive shows everything. */
 const HOMEPAGE_LIMIT = 6;
 const highlights = projects.slice(0, HOMEPAGE_LIMIT);
-
 const hasMore = projects.length > HOMEPAGE_LIMIT;
 ---
 
 <BaseLayout>
-	<Hero projectCount={projects.length} />
+	<Hero />
+
+	<div class="mx-auto max-w-[1300px] px-5 sm:px-8 lg:px-12">
+		{hasDeck() && <DeckBanner />}
+	</div>
 
 	<!-- ── Projects ─────────────────────────────────────────────────────── -->
-	<section class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
-		<div class="flex flex-wrap items-end justify-between gap-6">
-			<SectionHeading id="projects" index="01" eyebrow="Selected" title="Projects" />
-			<a
-				href="/projects"
-				class="font-mono text-[22px] uppercase tracking-[0.12em] text-fog underline-offset-4 transition-colors hover:text-signal hover:underline"
-			>
-				{hasMore ? `All ${projects.length} projects` : 'All Projects'} →
-			</a>
-		</div>
+	<section id="projects" class="mx-auto max-w-[1300px] scroll-mt-20 px-5 py-10 sm:px-8 sm:py-14 lg:px-12">
+		<h2 class="h-section mb-6">Projects</h2>
 
-		{hasDeck() && <DeckBanner class="mt-10" />}
+		<ProjectRows projects={highlights} />
 
-		<div class="mt-10">
-			<ProjectGrid projects={highlights} />
-		</div>
+		<a
+			href="/projects"
+			class="mt-7 inline-block border-b border-line pb-[3px] text-[0.94rem] no-underline transition-colors hover:border-signal"
+		>
+			{hasMore ? `All ${projects.length} projects` : 'Project archive'}
+		</a>
 	</section>
 
 	<!-- ── About ────────────────────────────────────────────────────────── -->
-	<section class="border-y border-line bg-surface/40">
-		<div class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
-			<SectionHeading id="about" index="02" eyebrow="Background" title="About" />
+	<section
+		id="about"
+		class="mx-auto max-w-[1300px] scroll-mt-20 border-t border-line px-5 py-12 sm:px-8 sm:py-16 lg:px-12"
+	>
+		<div class="grid gap-9 lg:grid-cols-[1.5fr_1fr] lg:gap-14">
+			<div>
+				<h2 class="h-section mb-6">About</h2>
 
-			<div class="mt-10 grid gap-12 lg:grid-cols-[1.4fr_1fr]">
-				<div class="space-y-5 text-base leading-relaxed text-fog">
-					<p>
-						I'm an <span class="text-chalk">Engineering Physics</span> student at the{' '}
-						{SITE.school}, working toward a career in mechanical design. Eng Phys is
-						a broad program — mechanics, electronics, software, and physics — and I've
-						pointed that breadth squarely at
-						<span class="text-chalk">mechanical engineering</span>.
-					</p>
-					<p>
-						What I care about is the loop between analysis and hardware: run the
-						numbers, model the part, make it, then find out where the model was wrong.
-						Most of the projects here started because something broke, bound, or
-						slipped, and the interesting work was figuring out why.
-					</p>
-					<p>
-						I'm currently looking for <span class="text-chalk">mechanical
-						engineering internships</span> where I can contribute to real design work —
-						CAD, analysis, prototyping, and time on the shop floor.
-					</p>
-				</div>
+				<p class="mb-[1.05rem] max-w-[62ch] text-[1.02rem] leading-[1.68] text-fog">
+					I'm an <b class="font-medium text-chalk">Engineering Physics</b> student at the
+					{SITE.school}, working toward a career in mechanical design. Eng Phys is a broad
+					program, covering mechanics, electronics, software, and physics, and I've pointed
+					that breadth squarely at <b class="font-medium text-chalk">mechanical engineering</b>.
+				</p>
+				<p class="mb-[1.05rem] max-w-[62ch] text-[1.02rem] leading-[1.68] text-fog">
+					What I care about is the loop between analysis and hardware: run the numbers,
+					model the part, make it, then find out where the model was wrong. Most of the
+					projects here started because something broke, bound, or slipped, and the
+					interesting work was figuring out why.
+				</p>
+				<p class="max-w-[62ch] text-[1.02rem] leading-[1.68] text-fog">
+					I'm currently looking for <b class="font-medium text-chalk">mechanical
+					engineering internships</b> where I can contribute to real design work: CAD,
+					analysis, prototyping, and time on the shop floor.
+				</p>
+			</div>
 
-				<div>
-					<h3 class="label-mono">Tools &amp; Skills</h3>
-					<ul class="mt-4 flex flex-wrap gap-2">
-						{
-							SKILLS.map((skill) => (
-								<li class="rounded-sm border border-line bg-ink px-2.5 py-1.5 font-mono text-[11px] tracking-[0.08em] text-fog">
-									{skill}
-								</li>
-							))
-						}
-					</ul>
-				</div>
+			<div>
+				<h3 class="mb-3.5 text-[0.95rem] font-semibold">Tools and Skills</h3>
+				<ul class="flex flex-wrap gap-1.5">
+					{
+						SKILLS.map((skill) => (
+							<li class="rounded border border-line px-2.5 py-1.5 text-[0.81rem] text-fog">
+								{skill}
+							</li>
+						))
+					}
+				</ul>
 			</div>
 		</div>
 	</section>
 
 	<!-- ── Contact ──────────────────────────────────────────────────────── -->
-	<section class="mx-auto max-w-6xl px-6 py-20 sm:py-24">
-		<SectionHeading id="contact" index="03" eyebrow="Contact" title="Let's connect!" />
+	<section id="contact" class="scroll-mt-20 border-t border-line bg-surface">
+		<div class="mx-auto max-w-[1300px] px-5 py-12 sm:px-8 sm:py-16 lg:px-12">
+			<h2 class="h-section">Let's connect!</h2>
 
-		<p class="mt-6 max-w-xl text-base leading-relaxed text-fog">
-			Open to mechanical engineering internships, co-ops, and design team work. The
-			fastest way to reach me is email.
-		</p>
+			<p class="mt-4 max-w-[50ch] text-[1.02rem] leading-relaxed text-fog">
+				Open to mechanical engineering internships, co-ops, and design team work. The
+				fastest way to reach me is email.
+			</p>
 
-		<div class="mt-8 flex flex-wrap items-center gap-3">
-			<a
-				href={`mailto:${SITE.email}`}
-				class="rounded-sm bg-signal px-5 py-2.5 font-mono text-[11px] tracking-[0.06em] text-ink transition-opacity hover:opacity-90"
-			>
-				{SITE.email}
-			</a>
-			<a
-				href={SITE.linkedin}
-				target="_blank"
-				rel="noopener noreferrer"
-				class="rounded-sm border border-line px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.12em] text-chalk transition-colors hover:border-signal/50 hover:text-signal"
-			>
-				LinkedIn ↗
-			</a>
+			<div class="mt-7 flex flex-wrap gap-2.5">
+				<a class="btn btn-solid" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+				<a
+					class="btn btn-ghost"
+					href={SITE.linkedin}
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					LinkedIn
+				</a>
+			</div>
 		</div>
 	</section>
 </BaseLayout>

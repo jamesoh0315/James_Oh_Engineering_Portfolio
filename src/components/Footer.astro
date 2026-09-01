@@ -4,35 +4,23 @@ import { SITE } from '../consts';
 const year = new Date().getFullYear();
 ---
 
-<footer class="mt-24 border-t border-line">
+<footer class="border-t border-line">
 	<div
-		class="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10 sm:flex-row sm:items-center sm:justify-between"
+		class="mx-auto flex max-w-[1300px] flex-wrap items-center justify-between gap-4 px-5 pb-10 pt-7 text-[0.86rem] text-fog sm:px-8 lg:px-12"
 	>
-		<div class="space-y-1">
-			<p class="text-sm font-semibold">{SITE.name}</p>
-			<p class="font-mono text-[11px] tracking-[0.1em] text-fog">
-				{SITE.role} · {SITE.school}
-			</p>
-		</div>
+		<span>{SITE.name}, {SITE.role} at {SITE.school}</span>
 
-		<div class="flex flex-wrap items-center gap-x-5 gap-y-2">
-			<a
-				href={`mailto:${SITE.email}`}
-				class="font-mono text-[11px] uppercase tracking-[0.12em] text-fog transition-colors hover:text-signal"
-			>
-				Email
-			</a>
+		<span class="flex flex-wrap items-center gap-x-5 gap-y-2">
+			<a href={`mailto:${SITE.email}`} class="transition-colors hover:text-signal">Email</a>
 			<a
 				href={SITE.linkedin}
 				target="_blank"
 				rel="noopener noreferrer"
-				class="font-mono text-[11px] uppercase tracking-[0.12em] text-fog transition-colors hover:text-signal"
+				class="transition-colors hover:text-signal"
 			>
 				LinkedIn
 			</a>
-			<span class="font-mono text-[11px] tracking-[0.1em] text-fog/60">
-				© {year}
-			</span>
-		</div>
+			<span class="text-fog/60">© {year}</span>
+		</span>
 	</div>
 </footer>
