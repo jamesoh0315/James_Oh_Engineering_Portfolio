@@ -22,3 +22,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# agent skills (Impeccable et al) — reinstall with: npx skills add pbakaus/impeccable
+.agents/
+.claude/
