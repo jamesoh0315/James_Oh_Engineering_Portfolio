@@ -44,12 +44,29 @@ const [plate, ...insets] = previews;
 				{SITE.name}
 			</h1>
 
+			<!--
+				The width is sized to hold "<role> @ <school>," on one line, and the
+				<br> forces the break after it rather than trusting the wrap point.
+				Below sm the <br> is off and the whole thing wraps naturally, since
+				the school name alone is as much as a narrow phone fits.
+			-->
 			<p
-				class="rise mt-6 max-w-[26ch] text-[clamp(1.1rem,1.75vw,1.4rem)] leading-[1.32] tracking-[-0.02em] [animation-delay:120ms]"
+				class="rise mt-6 max-w-[48ch] text-[clamp(1.1rem,1.75vw,1.4rem)] leading-[1.32] tracking-[-0.02em] [animation-delay:120ms]"
 			>
-				{SITE.role} @ {SITE.school}, specializing in <b class="font-semibold text-signal"
-					>{SITE.focus}</b
-				>.
+				<a
+					href={SITE.roleUrl}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="underline decoration-fog/40 underline-offset-4 transition-colors hover:text-signal hover:decoration-signal"
+					>{SITE.role}</a
+				> @ <a
+					href={SITE.schoolUrl}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="whitespace-nowrap underline decoration-fog/40 underline-offset-4 transition-colors hover:text-signal hover:decoration-signal"
+					>{SITE.school}</a
+				>,<br class="hidden sm:inline" />{' '}
+				specializing in <b class="font-semibold text-signal">{SITE.focus}</b>.
 			</p>
 
 			<div class="rise mt-8 flex flex-wrap gap-2.5 [animation-delay:180ms]">

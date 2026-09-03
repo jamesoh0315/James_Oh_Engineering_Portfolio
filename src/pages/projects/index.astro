@@ -3,12 +3,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProjectRows from '../../components/ProjectRows.astro';
 import DeckBanner from '../../components/DeckBanner.astro';
 import { getSortedProjects } from '../../utils/projects';
-import { hasDeck } from '../../utils/deck';
+import { hasOverviewPdf } from '../../utils/deck';
 
 const projects = await getSortedProjects();
 
-/** Hidden until slides exist, so it never links to an empty page. */
-const showDeckBanner = hasDeck();
+/** Hidden until the PDF exists, so it never links to a 404. */
+const showDeckBanner = hasOverviewPdf();
 ---
 
 <BaseLayout

@@ -4,7 +4,9 @@
 export const SITE = {
 	name: 'James Oh',
 	role: 'Engineering Physics',
+	roleUrl: 'https://engineering.ubc.ca/programs/undergraduate/engineering-physics',
 	school: 'University of British Columbia',
+	schoolUrl: 'https://www.ubc.ca/about/',
 	focus: 'Mechanical Engineering',
 	description:
 		'Engineering Physics student at UBC specializing in mechanical design — CAD, analysis, and fabrication. Seeking mechanical engineering internships.',

@@ -1,0 +1,90 @@
+---
+import { Image } from 'astro:assets';
+import { captionLines } from '../utils/caption';
+
+/**
+ * One lead image beside a 2x2 cluster of supporting images, sharing a caption.
+ *
+ * Unlike Figures.astro, which sizes items by height and lets them find their own
+ * width, this splits the row into proportional columns. That is deliberate: a
+ * content-sized version of this layout wraps at the `lg` breakout width (912px)
+ * and collapses the split exactly where a laptop would show it. Columns in `fr`
+ * always fit whatever container they land in, so the lead stays beside the
+ * cluster from `md` upward.
+ *
+ * Images are never upscaled — `w-auto` plus the emitted intrinsic size means a
+ * small screenshot sits centred in its frame instead of stretching to fill it.
+ *
+ * Reach for this when one image carries the section and the rest are supporting
+ * evidence for the same point. For a row of equals, use Figures.
+ *
+ *   <FigureSplit wide caption="Simulation setup"
+ *     lead={{ src: setup, alt: 'Fixtures and applied torque' }}
+ *     grid={[ ...four items... ]}
+ *   />
+ */
+
+interface Item {
+	src: ImageMetadata;
+	alt: string;
+}
+
+interface Props {
+	lead: Item;
+	grid: Item[];
+	caption?: string;
+	/** Upper bound on the lead, for sources large enough to need one. */
+	height?: number;
+	/** Break out past the prose column on large screens. */
+	wide?: boolean;
+}
+
+const { lead, grid, caption, height = 320, wide = false } = Astro.props;
+---
+
+<figure class:list={['not-prose my-10', wide && 'lg:-mx-24 xl:-mx-40']}>
+	<!-- items-center, not the default stretch: the lead frame hugs its image and
+	     centres against the taller cluster, rather than padding out dead surface
+	     above and below a short source. -->
+	<div class="grid items-center gap-3 md:grid-cols-[1.2fr_1fr]">
+		<div
+			class="flex items-center justify-center overflow-hidden rounded-lg border border-line bg-surface p-1.5"
+		>
+			<Image
+				src={lead.src}
+				alt={lead.alt}
+				loading="lazy"
+				class="h-auto w-auto max-w-full rounded object-contain"
+				style={`max-height: ${height}px;`}
+			/>
+		</div>
+
+		<div class="grid grid-cols-2 gap-3">
+			{
+				grid.map((item) => (
+					<div class="flex aspect-[4/3] items-center justify-center overflow-hidden rounded-lg border border-line bg-surface p-1.5">
+						<Image
+							src={item.src}
+							alt={item.alt}
+							loading="lazy"
+							class="h-auto max-h-full w-auto max-w-full rounded object-contain"
+						/>
+					</div>
+				))
+			}
+		</div>
+	</div>
+
+	{
+		caption && (
+			<figcaption class="mx-auto mt-4 max-w-2xl text-center text-[0.9rem] leading-relaxed text-fog">
+				{captionLines(caption).map((line, i) => (
+					<Fragment>
+						{i > 0 && <br />}
+						{line}
+					</Fragment>
+				))}
+			</figcaption>
+		)
+	}
+</figure>

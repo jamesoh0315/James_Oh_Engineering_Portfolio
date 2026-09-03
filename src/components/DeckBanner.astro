@@ -1,4 +1,12 @@
 ---
+import { OVERVIEW_PDF } from '../utils/deck';
+
+/**
+ * Fast track to the Overview deck, for anyone who wants the summary before the
+ * full writeups. Links straight at the PDF and opens it in a new tab, so the
+ * visitor keeps their place on the site.
+ */
+
 interface Props {
 	class?: string;
 }
@@ -7,18 +15,22 @@ const { class: className } = Astro.props;
 ---
 
 <a
-	href="/overview"
+	href={OVERVIEW_PDF}
+	target="_blank"
+	rel="noopener noreferrer"
 	class:list={[
-		'group flex items-center gap-3 border-y border-line py-4 text-chalk no-underline transition-colors hover:text-signal',
+		'group flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-signal/30 bg-signal/8 px-5 py-4 text-chalk no-underline transition-colors hover:border-signal/70 hover:bg-signal/15',
 		className,
 	]}
 >
+	<span class="block h-2 w-2 flex-none bg-signal" aria-hidden="true"></span>
 	<span class="font-semibold">In a hurry?</span>
-	<span class="text-[0.94rem] text-fog">Skim the three-minute overview instead</span>
-	<span
-		class="ml-auto font-semibold text-signal transition-transform duration-300 ease-out group-hover:translate-x-1.5"
-		aria-hidden="true"
-	>
-		→
+	<span class="text-[0.94rem] text-fog">Skim the three-minute overview deck</span>
+	<span class="ml-auto flex-none whitespace-nowrap text-[0.88rem] font-semibold text-signal">
+		PDF{' '}
+		<span
+			class="inline-block transition-transform duration-300 ease-out group-hover:translate-x-1"
+			aria-hidden="true">→</span
+		>
 	</span>
 </a>

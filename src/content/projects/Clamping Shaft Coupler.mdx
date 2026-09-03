@@ -1,0 +1,153 @@
+---
+title: "Clamping Shaft Coupler"
+order: 2
+summary: "Clamping style shaft coupler connecting the gearbox output shaft and the propeller shaft in the first 4WD vehicle of UBC BAJA."
+tags: ["Machine Design", "FEA", "Engineering Drawing", "SolidWorks", "Drivetrain"]
+coverImage: ../../assets/Clamping/Coupler in assem.png
+coverAlt: "Section view of the clamping coupler installed between the gearbox output shaft and the driveshaft"
+---
+
+import Figures from '../../components/Figures.astro';
+import FigureSplit from '../../components/FigureSplit.astro';
+import couplerFinal from '../../assets/Clamping/coupler final.png';
+import couplerBolts from '../../assets/Clamping/Coupler with bolts.png';
+import couplerOverview from '../../assets/Clamping/Coupler overview.png';
+import couplerSystem from '../../assets/Clamping/Coupler system.png';
+import feaSetup from '../../assets/Clamping/Coupler FEA set up.png';
+import contactA from '../../assets/Clamping/Screenshot 2025-03-22 181719.png';
+import contactB from '../../assets/Clamping/Screenshot 2025-03-22 181612.png';
+import boltConnectors from '../../assets/Clamping/Bolts coupler.png';
+import boltSettings from '../../assets/Clamping/Bolt setting more in coupler.png';
+import couplerResult from '../../assets/Clamping/Coupler FEA result.png';
+import insertResult from '../../assets/Clamping/Insert FEA result.png';
+import couplerDrawing from '../../assets/Clamping/Screenshot 2025-09-23 234508.png';
+import insertDrawing from '../../assets/Clamping/Insert Drawing.png';
+
+This is a clamping style shaft coupler that connects the **gearbox output shaft** and the
+**propeller shaft** in the first 4WD vehicle of UBC BAJA. It's designed to carry the full torque the
+gearbox delivers and hold the two shafts concentric. 
+
+## Overview
+### Design Objectives
+
+- **Weight optimization** — For a BAJA vehicle with limited horsepower, weight optimization
+  is very crucial. The coupler has been designed to the minimum permissible size through FEA
+  simulations.
+- **Maintain concentricity** — The clamping style coupler maintains concentricity of the two
+  connected shafts through clamping forces exerted by a set of bolts.
+- **Strength** — The coupler has been designed to withstand the maximum torque delivered to
+  the propeller shaft from the gearbox. Designed with **AISI 4130** and validated through FEA.
+- **Serviceability** — The coupler must be easy to install and uninstall in order to
+  service any of the propeller shaft components.
+
+### The Coupler
+
+The coupler is a single body rather than a pair of halves. A **partial slit** runs its length
+so the material flexes under bolt clamping force, and a **lateral cut** at mid-length
+separates the two clamping zones, letting each end close onto a slightly different shaft
+diameter. 
+
+Four **M4 bolts** pull the joint closed. Clearance holes through the upper half,
+tapped holes below, each seated in a machined pocket that keeps the head below the outer
+diameter. A **3/32″ × 3/16″ keyway** runs the full length of the coupler.
+
+<Figures
+	wide
+	height={300}
+	caption="Coupler as modelled and assembled with nearby components."
+	items={[
+		{ src: couplerFinal, alt: 'Isometric CAD render of the finished clamping shaft coupler' },
+		{ src: couplerBolts, alt: 'CAD render of the coupler clamped onto both shafts with four socket head cap screws fitted' },
+	]}
+/>
+
+<Figures
+	wide
+	height={520}
+	caption="Coupler overview with design features called out on the body."
+	items={[{ src: couplerOverview, alt: 'Annotated CAD view of the coupler labelling the keyway, partial slit, lateral cut, bolt pockets, and tapped holes' }]}
+/>
+
+### Assembly Layout
+
+The coupler bridges the gearbox output and the propeller shaft. On the **gearbox end** it clamps
+directly onto the gearbox output shaft, carried over from the gearbox project. On the
+**driveshaft end** it clamps onto a **driveshaft insert, an adapter (Part of this project)** that carries the key
+and ties the driveshaft into the coupler. The key in each bore carries the torque, while the
+bolt clamping load holds the joint concentric.
+
+<Figures
+	wide
+	height={520}
+	caption="Coupler layout: the driveshaft insert, the coupler acting as a bridge, and the gearbox output shaft."
+	items={[{ src: couplerSystem, alt: 'Annotated CAD layout showing the driveshaft insert, shaft coupler, and gearbox output shaft in section' }]}
+/>
+
+## Analysis
+### Simulation Setup
+
+I ran the stress study on the **full assembly** rather than the coupler alone, so the contact
+behaviour and bolt preload that actually set the stress state were part of the model.
+
+- Simulates full throttle for max torque delivered, **~81 Nm**.
+- A roller fixture at the end of the gearbox shaft, and a fixture near the weldment area of
+  the shaft insert. 81 Nm of torque applied from the gearbox shaft.
+- Definition of **all contact points and types** for every part in the assembly.
+- **Bolt connectors** to simulate clamping loads, with bolt settings sourced directly from the
+  McMaster-Carr M4 bolt.
+
+<FigureSplit
+	wide
+	caption="Simulation setup. Left: a roller fixture at the gearbox shaft end and a fixture near the weldment. 
+	Right: contact sets defined between every mating part, then bolt connectors carrying the clamping load with their strength data."
+	lead={{ src: feaSetup, alt: 'SolidWorks FEA setup showing fixture and load arrows on the coupler assembly' }}
+	grid={[
+		{ src: contactA, alt: 'Contact definition highlighting the key seated between the coupler and shaft' },
+		{ src: contactB, alt: 'Contact definition highlighting the mating bore and shaft faces inside the coupler' },
+		{ src: boltConnectors, alt: 'Four bolt connectors defined in the coupler bolt pockets, shown as blue bolt icons' },
+		{ src: boltSettings, alt: 'SolidWorks bolt strength data dialog showing 0.7 threads per mm, 170000 psi bolt strength, and a safety factor of 1.5' },
+	]}
+/>
+
+### Results
+
+**Coupler:** minimum factor of safety (FOS) of **~1.84**, occurring near the bolt pockets —
+above the aim FOS of ~1.5.
+
+**Shaft insert:** minimum factor of safety (FOS) of **~3.03**, occurring near the keyseat and
+weldment area.
+
+<Figures
+	wide
+	height={300}
+	caption="Factor of safety plots. Left: the coupler, with the minimum at a bolt pocket. 
+	Right: the driveshaft insert, with the minimum at the keyseat."
+	items={[
+		{ src: couplerResult, alt: 'Factor of safety contour plot of the coupler, minimum 1.844 at the bolt pockets' },
+		{ src: insertResult, alt: 'Factor of safety contour plot of the driveshaft insert, minimum 3.034 at the keyseat' },
+	]}
+/>
+
+## Outcome
+
+The final design met our packaging constraints while cutting cost by roughly **40%** against
+off-the-shelf alternatives.
+
+Two issues surfaced during vehicle integration: an initial misalignment between the propeller
+shaft and the gearbox output shaft, caused by tolerance stack-up across the full vehicle
+assembly, and a keyseat failure on the insert following a partial gearbox failure.
+
+I resolved the misalignment by adjusting the propeller shaft carrier bearing height, and
+addressed the keyseat failure by changing the insert material to **AISI 4340**, hardened to
+**HRC 40**. 
+Despite these challenges, this project successfully powered the 4WD system throughout the
+**2026 Oregon BAJA SAE competition**.
+
+<Figures
+	wide
+	columns={2}
+	items={[
+		{ src: couplerDrawing, alt: 'Manufacturing drawing of the rear driveshaft coupler with section, view, and end views' },
+		{ src: insertDrawing, alt: 'Manufacturing drawing of the driveshaft insert with a section view and end view' },
+	]}
+/>

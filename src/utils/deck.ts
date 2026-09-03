@@ -1,28 +1,26 @@
-/**
- * Overview deck slides.
- *
- * Drop slide images in src/assets/deck/ and they appear on /overview — no code
- * changes, same guarantee the projects collection gives you.
- *
- * Both letter cases are in the glob because PowerPoint on Windows exports .PNG.
- */
-const modules = import.meta.glob<{ default: ImageMetadata }>(
-	'../assets/deck/*.{png,PNG,jpg,JPG,jpeg,JPEG,webp,WEBP}',
-	{ eager: true },
-);
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 
 /**
- * Slides in numeric filename order.
+ * The Overview deck.
  *
- * The `numeric` collator option is load-bearing: PowerPoint exports Slide1.PNG …
- * Slide12.PNG, and a plain string sort would order those 1, 10, 11, 12, 2, 3 …
+ * The deck is served as a plain PDF rather than a rendered page: the "In a
+ * hurry?" banner links straight at the file. Nothing on the site renders the
+ * slides themselves, so exporting slide images is no longer part of the flow —
+ * the PDF is the whole deliverable.
  */
-export function getDeckSlides(): ImageMetadata[] {
-	return Object.entries(modules)
-		.sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
-		.map(([, mod]) => mod.default);
-}
+export const OVERVIEW_PDF = '/overview.pdf';
 
-export function hasDeck(): boolean {
-	return Object.keys(modules).length > 0;
+/**
+ * Whether the deck has actually been exported yet.
+ *
+ * Gating the banner on this means it can never link to a 404 — drop the file at
+ * public/overview.pdf and the banner appears on the next build.
+ *
+ * Resolve from process.cwd() (the project root during `astro build`), NOT from
+ * import.meta.url — pages run from a compiled chunk, so a source-relative path
+ * silently misses and the banner never appears.
+ */
+export function hasOverviewPdf(): boolean {
+	return existsSync(path.join(process.cwd(), 'public', 'overview.pdf'));
 }

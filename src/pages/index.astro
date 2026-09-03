@@ -4,7 +4,7 @@ import Hero from '../components/Hero.astro';
 import ProjectRows from '../components/ProjectRows.astro';
 import DeckBanner from '../components/DeckBanner.astro';
 import { getSortedProjects } from '../utils/projects';
-import { hasDeck } from '../utils/deck';
+import { hasOverviewPdf } from '../utils/deck';
 import { SITE, SKILLS } from '../consts';
 
 const projects = await getSortedProjects();
@@ -19,7 +19,7 @@ const hasMore = projects.length > HOMEPAGE_LIMIT;
 	<Hero />
 
 	<div class="mx-auto max-w-[1300px] px-5 sm:px-8 lg:px-12">
-		{hasDeck() && <DeckBanner />}
+		{hasOverviewPdf() && <DeckBanner />}
 	</div>
 
 	<!-- ── Projects ─────────────────────────────────────────────────────── -->
@@ -85,7 +85,7 @@ const hasMore = projects.length > HOMEPAGE_LIMIT;
 			<h2 class="h-section">Let's connect!</h2>
 
 			<p class="mt-4 max-w-[50ch] text-[1.02rem] leading-relaxed text-fog">
-				Open to mechanical engineering internships, co-ops, and design team work. The
+				Open to mechanical / manufacturing engineering internships, co-ops, and design team work. The
 				fastest way to reach me is email.
 			</p>
 
