@@ -1,0 +1,160 @@
+---
+title: "Shaft Carrier Bearing Tab"
+order: 4
+summary: "Weldment tab carrying the center propeller shaft bearing in the first 4WD vehicle of UBC BAJA."
+tags: ["Machine Design", "FEA", "Sheet Metal", "Weldment", "Drivetrain"]
+coverImage: ../../assets/Bearing Tab/final w bearing.png
+coverAlt: "CAD view of the bearing tab welded into the frame, carrying the propeller shaft bearing"
+---
+
+import Figures from '../../components/Figures.astro';
+import designOverview from '../../assets/Bearing Tab/Design overview.png';
+import normalSit from '../../assets/Bearing Tab/Normal loading.png';
+import normalSurface from '../../assets/Bearing Tab/Normal loading surface.png';
+import bottomSit from '../../assets/Bearing Tab/bottom loading sit.png';
+import bottomSurface from '../../assets/Bearing Tab/Bottom loading.png';
+import sideSit from '../../assets/Bearing Tab/side loading sit.png';
+import sideSurface from '../../assets/Bearing Tab/Side loading surface.png';
+import feaResult from '../../assets/Bearing Tab/Screenshot 2025-09-23 231137.png';
+import jigCad from '../../assets/Bearing Tab/Jigging placement.png';
+import jigAssembled from '../../assets/Bearing Tab/20250329_213827901_iOS.jpg';
+import skfBearing from '../../assets/Bearing Tab/SKF bearing.png';
+
+This is a weldment tab for the bearing that carries the **center propeller shaft** in the
+first 4WD vehicle of UBC BAJA. It has to hold the bearing accurately enough to keep the
+propeller shaft aligned, which puts as much weight on how it is welded as on how it is
+shaped.
+
+## Overview
+### Design Objectives
+
+- **Weight optimization** — For a BAJA vehicle with limited horsepower, weight optimization
+  is very crucial. The tab has been designed to the minimum permissible size through FEA
+  simulations.
+- **Positional accuracy** — The positioning of the bearing is crucial to maintain the
+  propeller shaft alignment. This tab uses multiple aligning features for assembly, and is
+  welded with a custom jig for accurate placement.
+- **Strength** — The tab has been designed to withstand the maximum stress in possible load
+  cases. Designed with **AISI 4130 0.063″ sheet metal** and validated through FEA.
+- **Manufacturability** — Manufactured in house, so the tab could not use complicated
+  compound bends or any difficult sheet metal assembly.
+
+### The Tab
+
+Two mounting pads carry **11 mm bolt holes** — the standard "normal fit" clearance for the
+M10 bolts the **SKF P2BL 100-TF** bearing requires — joined by a middle bridge that keeps
+the tab from twisting and holds both bolt holes horizontally aligned.
+
+Positional accuracy comes from two alignment features working on different axes. A
+rectangular tongue sits square to the width of the bearing feet, and the edge flanges sit
+square to their sides, so the bearing locates itself in both directions rather than being
+measured into place.
+
+<Figures
+	wide
+	height={480}
+	items={[{ src: designOverview, alt: 'Annotated CAD view of the bearing tab labelling the middle bridge, bolt holes, and two alignment features' }]}
+/>
+
+## Analysis
+
+Every case carries the same load: a supported net weight of **60 N** at the vehicle's maximum
+acceleration of **3 G**, so roughly **180 N** at the tab. What changes between them is the
+direction of that load and which surface it lands on.
+
+### Load Case 1 — Normal
+
+The primary case under normal conditions, where the weight of the shaft, bearing, and CV
+pulls down on the tab under gravity. The load is applied to the split surface where the tab
+contacts the bearing feet.
+
+<Figures
+	height={300}
+	caption="Normal load under gravity, and the split surface it acts on."
+	items={[
+		{ src: normalSit, alt: 'CAD view of the bearing in the frame with downward load arrows' },
+		{ src: normalSurface, alt: 'Split surfaces highlighted where the tab contacts the bearing feet' },
+	]}
+/>
+
+### Load Case 2 — Bump or Rollover
+
+A potential case where the force is applied upwards, either from the vehicle going over a
+bump or from ending up flipped over. Here the load is delivered to the surface the washer
+contacts.
+
+<Figures
+	wide
+	height={200}
+	caption="Upward load, and the washer contact surface it acts on."
+	items={[
+		{ src: bottomSit, alt: 'CAD view of the bearing in the frame with upward load arrows' },
+		{ src: bottomSurface, alt: 'Split surfaces highlighted where the washers contact the tab' },
+	]}
+/>
+
+### Load Case 3 — Side Impact
+
+A potential case where the force is applied sideways, in the event the vehicle rolls onto its
+side in an accident. The load lands on the same washer clamping surface, but acts parallel to
+it rather than into it.
+
+<Figures
+	wide
+	height={230}
+	caption="Sideways load, applied parallel to the washer clamping surface."
+	items={[
+		{ src: sideSit, alt: 'CAD view of the whole vehicle rolled onto its side with load arrows at the bearing' },
+		{ src: sideSurface, alt: 'Split surfaces highlighted with load arrows acting parallel to the tab face' },
+	]}
+/>
+
+### Results
+
+Minimum factor of safety (FOS) of **~2.077**, occurring in load case 3, the side load. Above
+the aim FOS of ~1.5.
+
+That comes from a peak von Mises stress of **221 MPa** against the material's **460 MPa**
+yield, with the maximum landing at the base of the flange where the tab meets the frame.
+
+<Figures
+	wide
+	height={460}
+	caption="Von Mises stress under the side load, the governing case."
+	items={[{ src: feaResult, alt: 'Von Mises stress plot of the bearing tab, maximum 221.411 MPa against a 460 MPa yield strength' }]}
+/>
+
+## Outcome
+
+Unfortunately, I never got a picture of the tab welded onto the car. By the time I thought
+to take one, the surrounding components had made the carrier bearing tab almost impossible
+to reach.
+
+The harder half of the problem was placement, so the tab was welded off a **custom jig**
+rather than measured in place. The jig fixed the tab relative to the jig table through an
+array of bolt holes, and its own pieces used **tab-and-slot features** so they could be
+waterjet cut separately, then assembled and welded together.
+
+<Figures
+	columns={2}
+	caption="The jig in CAD, and assembled: base plate, two pillars, a gusset, and a top plate for the tab to sit on."
+	items={[
+		{ src: jigCad, alt: 'CAD view of the welding jig bolted to a perforated jig table with the tab resting on top' },
+		{ src: jigAssembled, alt: 'The welded jig assembled on a welding table with the flat tab blank resting on top' },
+	]}
+/>
+
+The jig's layout shifted slightly from this design as the bearing's position moved partway
+through, which is the main thing I would change about the order of the work: the mounting
+position needs to be settled before the fixture that depends on it gets built.
+
+After those changes, the tab successfully supported the **P2BL 100-TF** bearing that carries
+the propeller shaft, powering the 4WD system throughout the
+**2026 Oregon BAJA SAE competition**.
+
+<Figures
+	height={300}
+	caption="The SKF P2BL 100-TF pillow block bearing the tab was built around."
+	items={[{ src: skfBearing, alt: 'Product render of the SKF P2BL 100-TF pillow block bearing' }]}
+/>
+

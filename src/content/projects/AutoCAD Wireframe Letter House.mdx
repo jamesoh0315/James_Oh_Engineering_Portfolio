@@ -1,0 +1,59 @@
+---
+title: "AutoCAD Wireframe Letter House"
+order: 6
+summary: "A house laid out in the shape of the letter G, modelled in AutoCAD wireframe with every interior component dimensioned separately."
+tags: ["AutoCAD", "3D Sketching", "Dimensioning"]
+coverImage: ../../assets/House/House overview.png
+coverAlt: "AutoCAD wireframe view of the letter house with its furniture laid out around it"
+---
+
+import Figures from '../../components/Figures.astro';
+import appliances from '../../assets/House/Appliances.png';
+import gym from '../../assets/House/Gym equipment.png';
+import topView from '../../assets/House/Top view.png';
+import isoView from '../../assets/House/Isometric view.png';
+
+This is a project to gain familiarity with **AutoCAD wireframe mode**, 3D sketching, and
+dimensioning.
+
+## Overview & Gallery
+### Furniture, appliances, and gym equipment
+
+All the interior components of the house are designed and dimensioned outside of the house.
+
+<Figures
+	wide
+	height={430}
+	caption="Kitchen appliances, dimensioned individually."
+	items={[{ src: appliances, alt: 'AutoCAD wireframe of a sink cabinet, cooktop, and oven with dimensions' }]}
+/>
+
+<Figures
+	wide
+	height={430}
+	caption="Gym equipment: dumbbell rack, bench, and plate storage."
+	items={[{ src: gym, alt: 'AutoCAD wireframe of a dumbbell rack, weight bench, and plate rack with dimensions' }]}
+/>
+
+### The house
+
+The plan is the letter **G**, with the major dimensions for the house shown. Drawing layers
+separate the systems:
+
+- **Green** — house structure
+- **Cyan** — plumbing
+- **Yellow** — furniture
+
+<Figures
+	wide
+	height={620}
+	caption="Top view."
+	items={[{ src: topView, alt: 'Top view of the G-shaped house plan with structure, plumbing, and furniture layers, surrounded by dimensioned components' }]}
+/>
+
+<Figures
+	wide
+	height={360}
+	caption="Isometric view."
+	items={[{ src: isoView, alt: 'Isometric wireframe view of the letter house with plumbing runs and furniture in place' }]}
+/>

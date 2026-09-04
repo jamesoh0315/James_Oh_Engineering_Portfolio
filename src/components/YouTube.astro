@@ -1,0 +1,57 @@
+---
+import { captionLines } from '../utils/caption';
+
+/**
+ * A YouTube embed, framed to match Figures.astro.
+ *
+ * Uses youtube-nocookie.com so nothing is set on the viewer until they actually
+ * press play, and `loading="lazy"` so the player is only fetched when it nears
+ * the viewport — an embed is by far the heaviest thing on a page otherwise made
+ * of static images.
+ *
+ * Takes the bare video ID, not a URL: share links carry tracking parameters
+ * (?si=...) that have no business in an embed src.
+ *
+ *   <YouTube id="L7m2c-MmfW4" title="Team 34300N post-season reveal" />
+ */
+
+interface Props {
+	/** Video ID only, e.g. 'L7m2c-MmfW4'. */
+	id: string;
+	/** Accessible name for the frame — screen readers announce this. */
+	title: string;
+	caption?: string;
+	/** Break out past the prose column on large screens. */
+	wide?: boolean;
+}
+
+const { id, title, caption, wide = false } = Astro.props;
+---
+
+<figure class:list={['not-prose my-10', wide && 'lg:-mx-24 xl:-mx-40']}>
+	<div class="overflow-hidden rounded-lg border border-line bg-surface p-1.5">
+		<div class="relative aspect-video overflow-hidden rounded bg-ink">
+			<iframe
+				src={`https://www.youtube-nocookie.com/embed/${id}`}
+				title={title}
+				loading="lazy"
+				referrerpolicy="strict-origin-when-cross-origin"
+				allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+				allowfullscreen
+				class="absolute inset-0 h-full w-full border-0"></iframe>
+		</div>
+	</div>
+
+	{
+		caption && (
+			<figcaption class="mx-auto mt-4 max-w-2xl text-center text-[0.9rem] leading-relaxed text-fog">
+				{captionLines(caption).map((line, i) => (
+					<Fragment>
+						{i > 0 && <br />}
+						{line}
+					</Fragment>
+				))}
+			</figcaption>
+		)
+	}
+</figure>

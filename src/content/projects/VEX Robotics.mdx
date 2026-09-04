@@ -1,0 +1,167 @@
+---
+title: "VEX Robotics"
+order: 5
+summary: "Three robots built on the VEX V5 platform: an Over-Under competition robot, an autonomous soccer bot, and a velocity-controlled curling bot."
+tags: ["Mechanism Design", "Controls", "C++", "PID", "Prototyping"]
+coverImage: ../../assets/VEX/20250218_071740000_iOS.jpg
+coverAlt: "The Over-Under competition robot on the field with its wing deployed beside a row of triballs"
+---
+
+import Figures from '../../components/Figures.astro';
+import YouTube from '../../components/YouTube.astro';
+import intake from '../../assets/VEX/20240206_233533148_iOS.jpg';
+import lift from '../../assets/VEX/20240206_233552386_iOS.jpg';
+import catapult from '../../assets/VEX/20250218_071803000_iOS.jpg';
+import wing from '../../assets/VEX/20250218_071740000_iOS.jpg';
+import soccerBot from '../../assets/VEX/20250218_071931000_iOS.jpg';
+import updatePos from '../../assets/VEX/Soccer bot updatepos.png';
+import motorControl from '../../assets/VEX/Soccer bot motorcontrol.png';
+import curlingDiagram from '../../assets/VEX/Curling shot diagram.png';
+import curlingCode from '../../assets/VEX/Curling PID code.png';
+
+This page introduces a few different versions of robots I've built using the **VEX robotics
+kit** and the **VEX V5** programming environment.
+
+## 1. Over-Under Competition Robot
+
+Team 34300N's entry for the 2024 Over-Under season, built to move triballs into the goal and
+hold ground against the opposing alliance.
+
+<YouTube
+	id="L7m2c-MmfW4"
+	title="34300N Post-Season Reveal, VEX Robotics Over Under 2024, Salish Robotics"
+	caption="Post-season reveal of the Over-Under robot."
+/>
+
+### Front intake
+
+The flexible frontal intake allows the robot to grab onto the game objective, the
+**triball**.
+
+<Figures
+	height={380}
+	items={[{ src: intake, alt: 'Close view of the robot showing the rubber-band flex intake and green sprockets' }]}
+/>
+
+### Double reverse bar lift
+
+The double reverse bar lift provides a height advantage, used for defence and offence
+alongside the catapult.
+
+<Figures
+	height={380}
+	items={[{ src: lift, alt: 'The robot with its double reverse bar lift extended to full height' }]}
+/>
+
+### Catapult
+
+Taking the double reverse bar's height to advantage, the catapult launches match-load
+triballs to the offensive side. It retracts to a set position using a **potentiometer**.
+
+<Figures
+	height={340}
+	items={[{ src: catapult, alt: 'A green triball loaded on the catapult at the top of the raised lift' }]}
+/>
+
+### Deployable wing
+
+A deployable wing plows a large number of game objectives toward the goal, controlled by
+**pneumatic pistons**.
+
+<Figures
+	height={340}
+	items={[{ src: wing, alt: 'The robot on the field with its wing deployed beside a row of green triballs' }]}
+/>
+
+## 2. Autonomous Soccer Bot
+
+### Overall design
+
+Designed with a frontal intake to grab tennis balls and load them onto the catapult. It
+carries **2 parallel shaft encoders**, **1 perpendicular shaft encoder**, and an **IMU** for
+path tracking.
+
+<Figures
+	height={460}
+	items={[{ src: soccerBot, alt: 'Overhead view of the soccer bot showing its omni wheels and rubber-band catapult' }]}
+/>
+
+### Testing
+
+With a pre-sampled path generated using **Bézier curves**, the bot tracks its own position
+while constantly correcting its deviation, in order to shoot at the desired location.
+
+<Figures
+	height={240}
+	caption="Tracking the sampled path and shooting from the target position."
+	items={[{ video: '/media/soccer-bot-shoot.mp4', poster: '/media/soccer-bot-shoot-poster.jpg', alt: 'The soccer bot driving a curved path and launching a tennis ball at the goal' }]}
+/>
+
+### Programming
+
+Program modified and developed under instruction, using **C++** in the VEX V5 programming
+environment.
+
+- `updatePosition()` — position tracking odometry, taking the input of 2 parallel encoders
+  and the robot heading angle returned by the IMU.
+- `controlMotors(double now)` — controller following points on the Bézier curve path,
+  calculating the current deviation from the next point and adjusting individual wheel
+  speeds accordingly.
+
+<Figures
+	wide
+	height={620}
+	caption="updatePosition(): odometry from the encoders and the IMU heading."
+	items={[{ src: updatePos, alt: 'C++ source of the updatePosition function computing odometry from encoder and inertial sensor readings' }]}
+/>
+
+<Figures
+	wide
+	height={700}
+	caption="controlMotors(): following the path and correcting deviation per wheel."
+	items={[{ src: motorControl, alt: 'C++ source of the controlMotors function computing per-wheel arc lengths and setting motor velocities' }]}
+/>
+
+## 3. Velocity Controlled Curling Bot
+
+### Objective
+
+Using the principle of momentum, the objective was to deliver the curling stone travelling
+accurately at the desired velocity, in order to re-create one of the greatest curling shots
+in history.
+
+<Figures
+	height={460}
+	caption="The shot geometry: stone positions and the delivery path to re-create."
+	items={[{ src: curlingDiagram, alt: 'Plotted diagram of the curling shot showing stone positions and the delivery path' }]}
+/>
+
+### Programming
+
+Program modified and developed under instruction, using **C++** in the VEX V5 programming
+environment.
+
+`setVel(double setPoint, double direction)` is a **PID controller** taking two parameters:
+
+- **setPoint** — the desired velocity, compared against the calculated current velocity,
+  accounting for wheel circumference and gear ratio.
+- **direction** — the desired heading. Mostly used to correct the robot's path, as it often
+  deviates due to physical misalignment.
+
+<Figures
+	height={700}
+	caption="setVel(): separate velocity and heading PID loops driving the four wheels."
+	items={[{ src: curlingCode, alt: 'C++ source of the setVel function showing velocity and heading PID terms applied to each motor' }]}
+/>
+
+### Testing
+
+With the robot travelling accurately at the set speed and holding a straight path under the
+PID controller, the curling stone can be delivered to the desired location at the ideal
+speed.
+
+<Figures
+	height={240}
+	caption="Delivering the stone at the set velocity."
+	items={[{ video: '/media/curling-test.mp4', poster: '/media/curling-test-poster.jpg', alt: 'The curling bot releasing a stone and the stone sliding to its target' }]}
+/>
