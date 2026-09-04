@@ -1,6 +1,6 @@
 ---
 title: "Carrier Bearing Tab"
-order: 5
+order: 6
 summary: "A sheet metal mounting tab redesigned around a fatigue crack, using a stress analysis to find the real failure driver before changing geometry."
 tags: ["Sheet Metal", "Stress Analysis", "DFM", "SolidWorks"]
 coverImage: ../../assets/placeholder-4.jpg

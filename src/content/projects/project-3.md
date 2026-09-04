@@ -1,6 +1,6 @@
 ---
 title: "VEX Robotics Drivetrain"
-order: 4
+order: 5
 summary: "An 8-wheel drivetrain iterated across a competition season, tuning gear ratio and weight distribution against real match telemetry."
 tags: ["CAD", "Gear Trains", "Iterative Testing", "Fabrication"]
 coverImage: ../../assets/placeholder-3.jpg

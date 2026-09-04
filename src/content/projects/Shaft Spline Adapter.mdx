@@ -1,0 +1,142 @@
+---
+title: "Shaft Spline Adapter"
+order: 3
+summary: "Welded shaft adapter connecting the slip spline and the propeller shaft in the first 4WD vehicle of UBC BAJA."
+tags: ["Machine Design", "FEA", "Machining", "Engineering Drawing", "Drivetrain"]
+coverImage: ../../assets/Adapter/shaft adapter system.png
+coverAlt: "CAD view of the adapter inserted into the propeller shaft"
+---
+
+import Figures from '../../components/Figures.astro';
+import adapterOverview from '../../assets/Adapter/Adapter overview.png';
+import adapterSystem from '../../assets/Adapter/shaft adapter system.png';
+import adapterSketch from '../../assets/Adapter/Adapter sketch.png';
+import adapterPlacement from '../../assets/Adapter/Adapter placement.png';
+import feaSetup from '../../assets/Adapter/adapter FEA setup.png';
+import feaResult from '../../assets/Adapter/Adapter FEA.png';
+import adapterDrawing from '../../assets/Adapter/Adapter drawing.png';
+import turning from '../../assets/Adapter/20250531_194226995_iOS.jpg';
+import boring from '../../assets/Adapter/20250811_211948127_iOS.jpg';
+import grinding from '../../assets/Adapter/20250921_003254204_iOS.jpg';
+import finished from '../../assets/Adapter/20250921_003247085_iOS.jpg';
+
+This is a welded shaft adapter that connects the **slip spline** and the **propeller shaft**
+in the first 4WD vehicle of UBC BAJA. It carries the full torque the gearbox delivers while
+keeping the spline's grease fitting reachable for service.
+
+## Overview
+### Design Objectives
+
+- **Weight optimization** — For a BAJA vehicle with limited horsepower, weight optimization
+  is very crucial. The adapter has been designed to the minimum permissible size through FEA
+  simulations.
+- **Grease fitting clearance** — Slip splines require lubrication to function properly
+  without excessive wear and noise. This adapter design exposes the grease fitting on the
+  spline for future service.
+- **Strength** — The adapter has been designed to withstand the maximum torque delivered to
+  the propeller shaft from the gearbox. Designed with **AISI 4340** and validated through FEA.
+- **Manufacturability** — Manufactured in house, so the design had to stay within the
+  machinery and tooling available in the shop.
+
+### The Adapter
+
+The adapter is a single turned part that steps from a **1.5″ spline bore** down to a
+**0.87″ OD** that seats inside the propeller shaft. A taper between the two diameters
+gives a gradual transition instead of a sharp shoulder, avoiding the stress concentration
+that would come with one. The spline end is bored out flat so the spline rests square
+against it.
+
+Two chamfered holes take **rosette welds** for extra stability. The spline end is cut back at
+**55°**, which exposes the spline's grease fitting while leaving a longer edge to weld along.
+
+<Figures
+	wide
+	height={520}
+	items={[{ src: adapterOverview, alt: 'Annotated CAD view of the adapter labelling the taper, driveshaft end, 55 degree angle cut, rosette weld holes, and spline end' }]}
+/>
+
+<Figures
+	height={300}
+	caption="The adapter seated in the propeller shaft."
+	items={[{ src: adapterSystem, alt: 'CAD view of the adapter inserted into the ghosted propeller shaft' }]}
+/>
+
+### Early Concept Sketches
+
+Before opening CAD, I worked the major dimensions out by hand — the 1.5″ spline bore, the
+driveshaft end, and the overall length then checked how the adapter would sit against the
+full propeller shaft.
+
+<Figures
+	wide
+	height={240}
+	caption="Major dimensions, and the adapter's placement on the propeller shaft."
+	items={[
+		{ src: adapterSketch, alt: 'Hand sketch of the adapter with major diameters and lengths marked' },
+		{ src: adapterPlacement, alt: 'CAD layout showing the adapter outlined in red at the end of the propeller shaft' },
+	]}
+/>
+
+## Analysis
+### Simulation Setup
+
+- Simulates full throttle for max torque delivered, **~81 Nm**.
+- A fixture at the spline end, where it will be welded together.
+- Torque applied at a **split line**, where it will be welded to the propeller shaft.
+
+<Figures
+	height={300}
+	caption="Fixture at the spline weld face, with torque applied at the split line."
+	items={[{ src: feaSetup, alt: 'SolidWorks FEA setup showing fixture arrows on the angled spline face and torque arrows at the taper' }]}
+/>
+
+### Results
+
+Minimum factor of safety (FOS) of **~6.117**, occurring near the welding point. Well above
+the aim FOS of ~3.5.
+
+The torque calculation and the FEA simulation shows the adapter could be made thinner, but that thickness isn't
+suitable for manufacturing the part would deform while being clamped in the lathe chuck
+and the vice.
+
+<Figures
+	wide
+	height={340}
+	caption="Factor of safety plot, with the minimum at the weld line."
+	items={[{ src: feaResult, alt: 'Factor of safety contour plot of the adapter, minimum 6.117 at the weld line' }]}
+/>
+
+## Outcome
+
+The part was released as a single machined component in **AISI 4340**, dimensioned in inches
+to a general tolerance of ±0.01, and cut in house on a manual lathe.
+
+I was able to fabricate the part in-house entirely, involving **10+ hours of lathing / milling** operations. 
+
+Without any issues identified during the testing stage, this project successfully powered the 4WD system throughout the
+**2026 Oregon BAJA SAE competition**.
+
+
+<Figures
+	wide
+	height={560}
+	items={[{ src: adapterDrawing, alt: 'Manufacturing drawing of the driveshaft adapter with section, front, and end views' }]}
+/>
+
+<Figures
+	columns={2}
+	caption="1. Turning both sides to the correct diameter. 2. Drilling and boring out the hole."
+	items={[
+		{ src: turning, alt: 'The adapter blank held in a lathe chuck, being turned to diameter' },
+		{ src: boring, alt: 'A drill in the lathe tailstock cutting the bore in the adapter' },
+	]}
+/>
+
+<Figures
+	height={400}
+	caption="3. Angle grinding, and the final result before sanding the surface."
+	items={[
+		{ src: grinding, alt: 'The adapter on a workbench after the 55 degree face was cut with an angle grinder' },
+		{ src: finished, alt: 'The finished adapter held in hand, showing the flat bored spline seat and a rosette weld hole' },
+	]}
+/>

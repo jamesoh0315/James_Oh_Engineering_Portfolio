@@ -25,4 +25,10 @@ pnpm-debug.log*
 
 # agent skills (Impeccable et al) — reinstall with: npx skills add pbakaus/impeccable
 .agents/
-.claude/
+.claude/*
+.claude/skills/*
+# ...except hand-authored project skills, which aren't reinstallable downloads.
+# (A directory-level ignore like ".claude/" prunes traversal entirely, so the
+# un-ignores above target contents one level at a time instead.)
+!.claude/skills/
+!.claude/skills/migrate-wix-project/
