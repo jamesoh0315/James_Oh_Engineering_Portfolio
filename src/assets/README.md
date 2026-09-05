@@ -71,13 +71,4 @@ If you get a field wrong, `npm run build` fails and names the file and the field
 ## Other files
 
 - **Favicon → `public/`** (already there).
-- **Overview deck →** see `src/assets/deck/README.md`.
-
-## Cleaning up the placeholders
-
-Once your real content is in, delete:
-
-- `src/assets/placeholder-1.jpg` … `placeholder-4.jpg`
-- `src/content/projects/project-1.md` … `project-4.md`
-
-Nothing else references them. **Keep `_template.md`.**
+- **Overview deck →** drop the exported PDF at `public/overview.pdf`; see `src/utils/deck.ts`.
