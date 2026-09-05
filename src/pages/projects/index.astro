@@ -1,11 +1,21 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProjectRows from '../../components/ProjectRows.astro';
+import ProjectGrid from '../../components/ProjectGrid.astro';
+import ProjectDivider from '../../components/ProjectDivider.astro';
 import DeckBanner from '../../components/DeckBanner.astro';
 import { getSortedProjects } from '../../utils/projects';
 import { hasOverviewPdf } from '../../utils/deck';
 
 const projects = await getSortedProjects();
+
+/**
+ * Current work reads as full-width rows, the archive as a card grid. The
+ * archive is older and there is more of it, so the point there is seeing the
+ * whole set at once rather than scrolling a row per project.
+ */
+const current = projects.filter((project) => !project.data.archived);
+const archived = projects.filter((project) => project.data.archived);
 
 /** Hidden until the PDF exists, so it never links to a 404. */
 const showDeckBanner = hasOverviewPdf();
@@ -25,7 +35,19 @@ const showDeckBanner = hasOverviewPdf();
 		{showDeckBanner && <DeckBanner class="mt-8" />}
 
 		<div class="mt-4">
-			<ProjectRows projects={projects} eagerCount={1} />
+			<ProjectRows projects={current} eagerCount={1} />
 		</div>
+
+		{
+			archived.length > 0 && (
+				<Fragment>
+					<ProjectDivider
+						label="Archive"
+						note="Earlier coursework, robotics, and personal builds."
+					/>
+					<ProjectGrid projects={archived} />
+				</Fragment>
+			)
+		}
 	</section>
 </BaseLayout>

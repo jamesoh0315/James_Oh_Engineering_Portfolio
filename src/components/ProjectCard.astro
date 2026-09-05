@@ -1,0 +1,64 @@
+---
+import { Image } from 'astro:assets';
+import type { Project } from '../utils/projects';
+import TagBadge from './TagBadge.astro';
+
+/**
+ * One project as a compact card, for grids where scanning matters more than
+ * reading — the archive, where a visitor wants to see the whole set at once
+ * rather than scroll a full-width row per project.
+ *
+ * The cover sits in the same 16:10 crop the rows use, so a `coverPosition`
+ * tuned on one layout still frames correctly in the other.
+ */
+
+interface Props {
+	project: Project;
+	/** Skip lazy-loading for cards above the fold. */
+	eager?: boolean;
+}
+
+const { project, eager = false } = Astro.props;
+const { title, summary, tags, coverImage, coverAlt, coverPosition } = project.data;
+
+/** Cap visible tags so a long list can't break the card rhythm. */
+const MAX_TAGS = 3;
+const visible = tags.slice(0, MAX_TAGS);
+const overflow = tags.length - visible.length;
+---
+
+<a
+	href={`/projects/${project.id}`}
+	class="group flex h-full flex-col overflow-hidden rounded-lg border border-line bg-surface no-underline transition-colors duration-300 hover:border-signal/50"
+>
+	<div class="relative aspect-[16/10] overflow-hidden bg-ink">
+		<Image
+			src={coverImage}
+			alt={coverAlt || title}
+			widths={[400, 800, 1200]}
+			sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 92vw"
+			loading={eager ? 'eager' : 'lazy'}
+			style={`object-position: ${coverPosition};`}
+			class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+		/>
+	</div>
+
+	<div class="flex flex-1 flex-col gap-2.5 p-5">
+		<h3 class="text-[1.15rem] font-bold leading-snug tracking-[-0.025em] transition-colors group-hover:text-signal">
+			{title}
+		</h3>
+
+		<p class="line-clamp-3 text-[0.9rem] leading-relaxed text-fog">{summary}</p>
+
+		{
+			visible.length > 0 && (
+				<div class="mt-auto flex flex-wrap gap-1.5 pt-2.5">
+					{visible.map((tag) => (
+						<TagBadge label={tag} />
+					))}
+					{overflow > 0 && <TagBadge label={`+${overflow}`} />}
+				</div>
+			)
+		}
+	</div>
+</a>

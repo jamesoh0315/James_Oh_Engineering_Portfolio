@@ -31,11 +31,23 @@ import { captionLines } from '../utils/caption';
  *     { src: drawingA, alt: '...' },
  *     { src: drawingB, alt: '...' },
  *   ]} />
+ *
+ * An item can also carry its own `caption`, rendered directly beneath that item
+ * instead of under the row. Use it when a row shows several distinct parts that
+ * each need naming, rather than one subject described once. Per-item and
+ * row-level captions can coexist; the row caption still sits below everything.
+ *
+ *   <Figures columns={2} items={[
+ *     { src: basePlate, alt: '...', caption: 'Base plate' },
+ *     { src: pillar,    alt: '...', caption: 'Pillar' },
+ *   ]} />
  */
 
 interface ImageItem {
 	src: ImageMetadata;
 	alt: string;
+	/** Caption for this item alone, shown directly beneath it. */
+	caption?: string;
 }
 
 interface VideoItem {
@@ -44,6 +56,8 @@ interface VideoItem {
 	/** Still frame shown before the clip loads, avoids an empty box. */
 	poster?: string;
 	alt: string;
+	/** Caption for this item alone, shown directly beneath it. */
+	caption?: string;
 }
 
 type Item = ImageItem | VideoItem;
@@ -62,52 +76,132 @@ interface Props {
 const { items, caption, height = 260, wide = false, columns } = Astro.props;
 
 const isVideo = (item: Item): item is VideoItem => 'video' in item;
+
+const hasItemCaptions = items.some((item) => item.caption);
 ---
 
 <figure class:list={['not-prose my-10', wide && 'lg:-mx-24 xl:-mx-40']}>
-	<div
-		class:list={[
-			'flex justify-center gap-4',
-			columns ? 'flex-nowrap items-stretch' : 'flex-wrap items-end',
-		]}
-	>
-		{
-			items.map((item) => (
-				<div
-					class:list={[
-						'overflow-hidden rounded-lg border border-line bg-surface p-1.5',
-						columns ? 'flex min-w-0 flex-1 basis-0 items-center justify-center' : 'max-w-full',
-					]}
-				>
-					{isVideo(item) ? (
-						<video
-							src={item.video}
-							poster={item.poster}
-							controls
-							autoplay
-							muted
-							loop
-							playsinline
-							aria-label={item.alt}
-							class:list={['rounded', columns ? 'h-auto w-full' : 'h-auto w-auto max-w-full']}
-							style={columns ? undefined : `max-height: ${height}px;`}
-						/>
-					) : (
-						<Image
-							src={item.src}
-							alt={item.alt}
-							loading="lazy"
-							class:list={[
-								'rounded object-contain',
-								columns ? 'h-auto w-full' : 'h-auto w-auto max-w-full',
-							]}
-							style={columns ? undefined : `max-height: ${height}px;`}
-						/>
+	{columns && hasItemCaptions ? (
+		// Grid, not flex: a per-item figure that stretches as one block would let a
+		// 2-line caption steal height from its own frame (shrinking the image box)
+		// while a 1-line sibling doesn't — captions then start at different y
+		// positions. Pinning frames to grid row 1 and captions to row 2 keeps every
+		// frame the same height regardless of caption length, so captions line up.
+		<div
+			class="grid gap-x-4 gap-y-2.5"
+			style={`grid-template-columns: repeat(${items.length}, minmax(0, 1fr));`}
+		>
+			{items.map((item, i) => (
+				<Fragment>
+					<div
+						class="flex items-center justify-center overflow-hidden rounded-lg border border-line bg-surface p-1.5"
+						style={`grid-column: ${i + 1}; grid-row: 1;`}
+					>
+						{isVideo(item) ? (
+							<video
+								src={item.video}
+								poster={item.poster}
+								controls
+								autoplay
+								muted
+								loop
+								playsinline
+								aria-label={item.alt}
+								class="h-auto w-full rounded"
+							/>
+						) : (
+							<Image
+								src={item.src}
+								alt={item.alt}
+								loading="lazy"
+								class="h-auto w-full rounded object-contain"
+							/>
+						)}
+					</div>
+					{item.caption && (
+						<figcaption
+							class="text-center text-[0.85rem] leading-snug text-fog"
+							style={`grid-column: ${i + 1}; grid-row: 2;`}
+						>
+							{captionLines(item.caption).map((line, j) => (
+								<Fragment>
+									{j > 0 && <br />}
+									<span class:list={[j === 0 && 'font-semibold text-[0.92rem] text-chalk']}>
+										{line}
+									</span>
+								</Fragment>
+							))}
+						</figcaption>
 					)}
-				</div>
-			))
-		}
-	</div>
+				</Fragment>
+			))}
+		</div>
+	) : (
+		<div
+			class:list={[
+				'flex justify-center gap-4',
+				columns ? 'flex-nowrap items-stretch' : 'flex-wrap',
+				!columns && (hasItemCaptions ? 'items-start' : 'items-end'),
+			]}
+		>
+			{
+				items.map((item) => (
+					<figure
+						class:list={[
+							'm-0',
+							columns ? 'flex min-w-0 flex-1 basis-0 flex-col' : 'max-w-full',
+						]}
+					>
+					<div
+						class:list={[
+							'overflow-hidden rounded-lg border border-line bg-surface p-1.5',
+							columns ? 'flex flex-1 items-center justify-center' : 'max-w-full',
+						]}
+					>
+						{isVideo(item) ? (
+							<video
+								src={item.video}
+								poster={item.poster}
+								controls
+								autoplay
+								muted
+								loop
+								playsinline
+								aria-label={item.alt}
+								class:list={['rounded', columns ? 'h-auto w-full' : 'h-auto w-auto max-w-full']}
+								style={columns ? undefined : `max-height: ${height}px;`}
+							/>
+						) : (
+							<Image
+								src={item.src}
+								alt={item.alt}
+								loading="lazy"
+								class:list={[
+									'rounded object-contain',
+									columns ? 'h-auto w-full' : 'h-auto w-auto max-w-full',
+								]}
+								style={columns ? undefined : `max-height: ${height}px;`}
+							/>
+						)}
+					</div>
+
+					{item.caption && (
+						<figcaption class="mt-2.5 text-center text-[0.85rem] leading-snug text-fog">
+							{captionLines(item.caption).map((line, i) => (
+								<Fragment>
+									{i > 0 && <br />}
+									<span class:list={[i === 0 && 'font-semibold text-[0.92rem] text-chalk']}>
+										{line}
+									</span>
+								</Fragment>
+							))}
+						</figcaption>
+					)}
+					</figure>
+				))
+			}
+		</div>
+	)}
 
 	{
 		caption && (

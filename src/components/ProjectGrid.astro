@@ -1,0 +1,32 @@
+---
+import ProjectCard from './ProjectCard.astro';
+import type { Project } from '../utils/projects';
+
+/**
+ * Projects as a card grid: one column on phones, two on tablets, three from
+ * `lg` up. Cards stretch to equal height per row, so a short summary doesn't
+ * leave its neighbour's tag row hanging.
+ */
+
+interface Props {
+	projects: Project[];
+	/** Number of leading cards to load eagerly (above the fold). */
+	eagerCount?: number;
+}
+
+const { projects, eagerCount = 0 } = Astro.props;
+---
+
+{
+	projects.length === 0 ? (
+		<p class="rounded-lg border border-dashed border-line p-10 text-center text-sm text-fog">
+			No projects yet. Add a markdown file to src/content/projects/
+		</p>
+	) : (
+		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+			{projects.map((project, i) => (
+				<ProjectCard project={project} eager={i < eagerCount} />
+			))}
+		</div>
+	)
+}

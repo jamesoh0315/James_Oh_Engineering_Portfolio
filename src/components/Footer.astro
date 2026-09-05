@@ -1,5 +1,6 @@
 ---
 import { SITE } from '../consts';
+import LinkedInIcon from './LinkedInIcon.astro';
 
 const year = new Date().getFullYear();
 ---
@@ -16,9 +17,11 @@ const year = new Date().getFullYear();
 				href={SITE.linkedin}
 				target="_blank"
 				rel="noopener noreferrer"
-				class="transition-colors hover:text-signal"
+				aria-label="LinkedIn profile"
+				title="LinkedIn"
+				class="flex items-center transition-colors hover:text-signal"
 			>
-				LinkedIn
+				<LinkedInIcon size={19} />
 			</a>
 			<span class="text-fog/60">© {year}</span>
 		</span>

@@ -1,0 +1,116 @@
+---
+title: "Autonomous Claw — APSC 101"
+order: 10
+archived: true
+summary: "A first-year team project: a sheet metal claw that senses its own approach with an ultrasonic sensor and closes on the object without a human input."
+tags: ["SolidWorks", "Sheet Metal", "Arduino", "Electromechanical"]
+coverImage: ../../assets/Claw/Claw cover pic.png
+coverAlt: "The finished aluminium claw hanging from a carabiner with its Arduino and wiring mounted on top"
+---
+
+import Figures from '../../components/Figures.astro';
+import clawCad from '../../assets/Claw/Claw CAD.png';
+import clawDrawing from '../../assets/Claw/Claw drawing.jpg';
+import arduinoDiagram from '../../assets/Claw/Arduino test diagram.png';
+import distanceSensor from '../../assets/Claw/distance sensor.jpg';
+import debouncing from '../../assets/Claw/debouncing.png';
+import clawLoop from '../../assets/Claw/claw loop.png';
+
+This is a first-year engineering project at the **University of British Columbia**, built for
+**APSC 101 — Introduction to Engineering II**. The claw hangs from a line and closes on its
+own: an ultrasonic sensor watches the gap underneath it, and the servo fires once the
+object is close enough.
+
+## Overview
+### Design Objectives
+
+- **Flexibility** — Grab and hold a variety of items across different sizes, weights, and
+  dimensions, rather than one part in one orientation.
+- **Efficient code** — Make the claw time efficient by giving it a precise script to follow,
+  built around an Arduino controller and a sonar sensor.
+- **Durability** — A claw body and motorizing mechanism durable enough to survive repeated
+  use and minor collisions.
+
+## Design overview
+
+The trigger is a single ultrasonic distance sensor. It measures the gap between the claw and
+whatever is beneath it, and once that gap holds under the threshold, the servo closes the
+jaws.
+
+<Figures
+	height={190}
+	caption="The Arduino, servo, and ultrasonic sensor wired on a breadboard for bench testing."
+	items={[
+		{ src: arduinoDiagram, alt: 'Breadboard wiring diagram of an Arduino Uno connected to a servo motor and an ultrasonic sensor' },
+		{ src: distanceSensor, alt: 'The HC-SR04 style ultrasonic distance sensor module' },
+	]}
+/>
+
+Two details in the code did most of the work for reliability. The jaws close through a
+`for` loop that steps the servo down in 2° increments with a short delay between each, so
+they draw shut at a controlled rate instead of slamming closed and knocking the object away.
+
+The sensor reading is **debounced**. A single close reading is not enough to fire.
+The distance has to stay under the trigger threshold continuously for a set interval before
+the claw commits, which rejects the erroneous spikes an ultrasonic sensor throws when it
+catches an edge or misses a return entirely.
+
+<Figures
+	wide
+	height={280}
+	caption="The debounce helper, and the main loop that reads the sonar and drives the servo closed."
+	items={[
+		{ src: debouncing, alt: 'Arduino code for the debouncedSonar function, requiring the distance to hold below the trigger for a set interval' },
+		{ src: clawLoop, alt: 'Arduino main loop code reading the sonar and stepping the servo closed in two degree increments' },
+	]}
+/>
+
+## CAD prototype
+
+The claw was designed in **SolidWorks**, with imported models for the sensor and the
+Arduino and the rest of the body built using **sheet metal** features so it could be
+flattened, cut, and bent from aluminium.
+
+<Figures
+	wide
+	height={320}
+	caption="The SolidWorks model, and the jaw motion animated from the assembly."
+	items={[
+		{ src: clawCad, alt: 'SolidWorks model of the claw showing the sheet metal jaws, mounting plate, Arduino, and sensor' },
+		{
+			video: '/media/claw-cad-animation.mp4',
+			poster: '/media/claw-cad-animation-poster.jpg',
+			alt: 'Animation of the claw jaws opening and closing in SolidWorks',
+		},
+	]}
+/>
+
+## Outcome
+
+The claw exceeded expectations, picking up **38 blocks** in a timed class competition.
+The claw set the class record and won us the competition, demonstrating excellent
+reliability and efficiency.
+
+<Figures
+	wide
+	caption="Drawing of the claw layout: 5.50″ across the body, jaws opening to 225°"
+	items={[{ src: clawDrawing, alt: 'Orthographic engineering drawing of the claw with dimensions and title block for APSC 101 Team A9' }]}
+/>
+
+<Figures
+	wide
+	height={320}
+	caption="The finished claw closing on its own as it comes down over a target."
+	items={[
+		{
+			video: '/media/claw-handheld-test.mp4',
+			poster: '/media/claw-handheld-test-poster.jpg',
+			alt: 'The claw lowered by hand over a marker on the floor, closing automatically as it approaches',
+		},
+		{
+			video: '/media/claw-demo.mp4',
+			poster: '/media/claw-demo-poster.jpg',
+			alt: 'The claw suspended on a line, descending into a bin and picking up an object',
+		},
+	]}
+/>

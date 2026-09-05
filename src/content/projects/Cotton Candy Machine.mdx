@@ -1,0 +1,106 @@
+---
+title: "Cotton Candy Machine"
+order: 9
+archived: true
+summary: "An experimental fully electric cotton candy machine: a spinner head on a compound gear reduction, heated and driven from a wall outlet."
+tags: ["Prototyping", "Electromechanical", "Heat Transfer"]
+coverImage: ../../assets/Cotton Candy/Full assembly.jpg
+coverAlt: "The assembled cotton candy machine: a stainless bowl on a bolted metal frame with the voltage converter mounted alongside"
+---
+
+import Figures from '../../components/Figures.astro';
+import fullAssembly from '../../assets/Cotton Candy/Full assembly.jpg';
+import spinnerHead from '../../assets/Cotton Candy/Spinner head.jpg';
+import voltageConverter from '../../assets/Cotton Candy/Voltage converter.jpg';
+import heatingElements from '../../assets/Cotton Candy/Heating elements.jpg';
+import motorGearTrain from '../../assets/Cotton Candy/Motor and gear train.jpg';
+import cottonCandyStrands from '../../assets/Cotton Candy/Cotton candy strands.jpg';
+
+This is an experimental project to build a **fully electric cotton candy machine**.
+
+## Design overview
+
+<Figures
+	wide
+	columns={2}
+	items={[
+		{
+			src: spinnerHead,
+			alt: 'The perforated spinner head, a cut-down aluminium can, mounted above the heating elements inside the stainless bowl',
+			caption: 'Spinner head\nSugar is poured into the head. Once it melts, it escapes through the ring of tiny holes under centrifugal force and forms cotton candy strands.',
+		},
+		{
+			src: voltageConverter,
+			alt: 'The AC to DC voltage converter mounted on the frame with its terminal block wired to the motor and heaters',
+			caption: 'AC–DC voltage converter\nEvery component runs on DC, so a converter steps the AC household outlet down to supply the motor and the heating elements.',
+		},
+	]}
+/>
+
+<Figures
+	wide
+	columns={2}
+	items={[
+		{
+			src: heatingElements,
+			alt: 'Two finned PTC ceramic heating elements mounted side by side on a bracket and wrapped in aluminium foil',
+			caption: 'Heating elements\nTwo positive temperature coefficient (PTC) convection heaters, rated for an output temperature of 200 °C ± 10 °C.',
+		},
+		{
+			src: motorGearTrain,
+			alt: 'The DC motor mounted under the frame driving a compound gear train up to the vertical spinner shaft',
+			caption: 'Motor\nA 1000 RPM DC motor geared down to 350 RPM at the spinner head through a compound gear train.',
+		},
+	]}
+/>
+
+## Outcome
+
+Being an experimental project, not everything went according to plan. The spinner head and
+the electrical system both worked as intended. The converter ran the motor and the heaters
+together off one outlet, and the gear train held the head at its target speed. What fell
+short was heat. The PTC elements could not melt sugar quickly enough to sustain strands, and
+the machine as a whole ended up too unreliable to run start to finish.
+
+<Figures
+	wide
+	height={420}
+	caption="The assembled machine."
+	items={[
+		{
+			src: fullAssembly,
+			alt: 'The complete cotton candy machine assembled on a bolted metal frame with wheels and a stainless bowl',
+		},
+	]}
+/>
+
+To find out whether heat was the *only* problem, I pulled the PTC elements out and warmed
+the spinner head externally with a heat gun instead. With a high enough temperature at the
+head, the strands formed exactly as they were supposed to.
+
+<Figures
+	wide
+	height={420}
+	caption="Strands spun out against the bowl wall during the heat gun test, with caramelised sugar left around the head."
+	items={[
+		{
+			src: cottonCandyStrands,
+			alt: 'Looking down into the bowl at wispy white cotton candy strands spun out around the perforated head',
+		},
+	]}
+/>
+
+### What I would take away from it
+
+**A temperature rating is not a heat budget.** I chose the PTC elements on their rated
+output of 200 °C ± 10 °C and treated that number as sufficient. What actually decides
+whether sugar melts is how much *power* the elements can push into it against everything
+carrying heat away. 
+
+**Isolating a subsystem beats repeating the whole test.** Swapping in the heat gun took an
+afternoon and answered a question that several full runs had not. It is worth reaching for
+that kind of substitution earlier, before assuming the fault is spread across the design.
+
+**Building from parts on hand sets a ceiling.** The motor, heating element, frame, gears, and brackets were
+repurposed from what I already had, which got the machine running quickly but left the
+assembly less rigid and less repeatable than desired.

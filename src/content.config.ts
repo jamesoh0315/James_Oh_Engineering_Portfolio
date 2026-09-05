@@ -32,6 +32,11 @@ const projects = defineCollection({
 			// Lower numbers lead. Anything without an `order` falls to the end,
 			// where ties break on filename.
 			order: z.number().default(9999),
+			// Earlier coursework and personal builds. Archived projects sort below
+			// every current one regardless of `order`, and the archive page draws a
+			// labelled divider where the group starts — so moving a project across
+			// that line is this one field, with no renumbering.
+			archived: z.boolean().default(false),
 		}),
 });
 

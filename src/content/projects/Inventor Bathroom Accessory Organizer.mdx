@@ -1,0 +1,73 @@
+---
+title: "Bathroom Accessory Organizer"
+order: 8
+archived: true
+summary: "A rotating two-tier bathroom organizer modelled in Autodesk Inventor and 3D printed, turned by a spur gear pair."
+tags: ["Autodesk Inventor", "CAD", "3D Printing", "Rapid Prototyping"]
+coverImage: ../../assets/Organizer/Final assembly.png
+coverAlt: "CAD assembly of the two-tier bathroom organizer with its spur gear drive"
+---
+
+import Figures from '../../components/Figures.astro';
+import basePlate from '../../assets/Organizer/Base plate.png';
+import pillar from '../../assets/Organizer/Pillar.png';
+import leg from '../../assets/Organizer/Leg.png';
+import spurGear from '../../assets/Organizer/Spur gear large.png';
+import finalAssembly from '../../assets/Organizer/Final assembly.png';
+
+This is a project to gain familiarity with **Autodesk Inventor** part design and assembly, as
+well as rapid prototyping with 3D printing.
+
+## Overview & Gallery
+
+<Figures
+	wide
+	columns={2}
+	items={[
+		{
+			src: basePlate,
+			alt: 'CAD view of the octagonal base plate with labelled pockets for each bathroom accessory',
+			caption: 'Base plate 1\nA base plate to hold a variety of bathroom accessories, such as toothbrushes and skin care products.',
+		},
+		{
+			src: pillar,
+			alt: 'CAD view of the pillar, a long rail with T-shaped ends',
+			caption: 'Pillar\nA pillar supporting the organizer tower. Three are used in the assembly.',
+		},
+	]}
+/>
+
+<Figures
+	wide
+	columns={2}
+	items={[
+		{
+			src: leg,
+			alt: 'CAD view of the curved S-shaped leg piece',
+			caption: 'Leg\nA small leg supporting the assembly at the bottom. Five are used in the assembly.',
+		},
+		{
+			src: spurGear,
+			alt: 'CAD view of the large spur gear with a keyed central bore',
+			caption: 'Spur gear, large\nOne of the gears that rotates the assembly, driven by a smaller gear for leveraged torque.',
+		},
+	]}
+/>
+
+<Figures
+	wide
+	columns={2}
+	items={[
+		{
+			src: finalAssembly,
+			alt: 'CAD assembly of the full organizer: two tiers on pillars and legs, with the spur gear pair alongside',
+			caption: 'Final CAD assembly',
+		},
+		{
+			video: '/media/rotating-organizer.mp4',
+			poster: '/media/rotating-organizer-poster.jpg',
+			alt: 'The 3D printed organizer rotating on its gear drive',
+			caption: 'Physical assembly',
+		},
+	]}
+/>

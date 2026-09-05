@@ -6,6 +6,7 @@ import DeckBanner from '../components/DeckBanner.astro';
 import { getSortedProjects } from '../utils/projects';
 import { hasOverviewPdf } from '../utils/deck';
 import { SITE, SKILLS } from '../consts';
+import LinkedInIcon from '../components/LinkedInIcon.astro';
 
 const projects = await getSortedProjects();
 
@@ -92,11 +93,12 @@ const hasMore = projects.length > HOMEPAGE_LIMIT;
 			<div class="mt-7 flex flex-wrap gap-2.5">
 				<a class="btn btn-solid" href={`mailto:${SITE.email}`}>{SITE.email}</a>
 				<a
-					class="btn btn-ghost"
+					class="btn btn-ghost inline-flex items-center gap-2"
 					href={SITE.linkedin}
 					target="_blank"
 					rel="noopener noreferrer"
 				>
+					<LinkedInIcon size={18} />
 					LinkedIn
 				</a>
 			</div>

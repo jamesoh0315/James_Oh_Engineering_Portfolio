@@ -1,5 +1,6 @@
 ---
 import { SITE, NAV } from '../consts';
+import LinkedInIcon from './LinkedInIcon.astro';
 ---
 
 <header
@@ -32,9 +33,11 @@ import { SITE, NAV } from '../consts';
 						href={SITE.linkedin}
 						target="_blank"
 						rel="noopener noreferrer"
-						class="rounded-md border border-line px-3.5 py-1.5 text-[0.85rem] transition-colors hover:border-signal hover:text-signal"
+						aria-label="LinkedIn profile"
+						title="LinkedIn"
+						class="flex items-center rounded-md border border-line px-2.5 py-1.5 text-fog transition-colors hover:border-signal hover:text-signal"
 					>
-						LinkedIn
+						<LinkedInIcon size={18} />
 					</a>
 				</li>
 			</ul>
