@@ -1,0 +1,247 @@
+---
+title: "Pre-Nitriding Rotor Washing Jig"
+order: 3
+summary: "Quick-locking wash fixture for electric actuator rotors, replacing a hands in water cleaning process."
+tags: ["Creo", "3D Printing", "Fixture Design", "DFM", "Ergonomics"]
+coverImage: ../../assets/Washing Jig/Jig in tank.jpg
+coverAlt: "Two 3D printed jig towers holding rotors, submerged in the ultrasonic washing tank"
+---
+
+import Figures from '../../components/Figures.astro';
+import jigUse from '../../assets/Washing Jig/Jig Use.png';
+import creoAssemblies from '../../assets/Washing Jig/Creo AMS & Gyro.png';
+import finalAssembly from '../../assets/Washing Jig/Final assembly.jpg';
+import nubInSlot from '../../assets/Washing Jig/Nub in slot.png';
+import armFailure from '../../assets/Washing Jig/Arm failure.png';
+import armRedesign from '../../assets/Washing Jig/Arm redesign.png';
+import holderFailure from '../../assets/Washing Jig/Holder failure.jpg';
+import holderFailureCloseup from '../../assets/Washing Jig/Holder failure closeup.jpg';
+import holderRedesign1 from '../../assets/Washing Jig/Holder redesign1.png';
+import holderRedesign2 from '../../assets/Washing Jig/Holder redesign2.png';
+import nubWear from '../../assets/Washing Jig/Nub wear comparison.png';
+import workStandard from '../../assets/Washing Jig/Work standard.png';
+import spareParts from '../../assets/Washing Jig/Spare parts.jpg';
+import printedParts from '../../assets/Washing Jig/Printed parts.png';
+
+During my co-op term at **Dometic Marine**, actuator rotors had to be scrubbed
+completely free of grease and machining debris before nitriding, and the operators were
+doing it by holding each rotor against a rotating brush with their hands in the
+water. Building on an early-stage concept from a previous term, I designed the
+**quick-locking fixture** that went into production.
+
+## Overview
+
+### The Problem
+
+Nitriding diffuses nitrogen into the surface of a part to harden it. Any residual grease or
+machining debris left on a rotor **blocks that absorption**, thus the rotors have to be spotless before they reach the furnace.
+
+Cleaning happens in an **ultrasonic bath**, with a pneumatic rotating brush run down the
+rotor's internal threads. The original process had operators hold each rotor against that
+brush themselves, submerged, which carried a **repetitive stress injury risk** and
+cleaned the internal threads inconsistently.
+
+There are two rotor families run through the same station: **AMS (45 mm)** and **Gyro** so the jig
+exists in two variants.
+
+<Figures
+	height={430}
+	caption="The station in use: the jig holds the rotor, the operator guides the brush from above with the pulley string, and their hands stay out of the bath."
+	items={[
+		{ src: jigUse, alt: 'Gloved operator lowering a rotating brush into a rotor held by the jig in the ultrasonic tank' },
+	]}
+/>
+
+### Design Objectives
+
+- **Hands out of the water** — the operator must be able to lock and release a rotor
+  without reaching into the bath. 
+- **Survive the bath** — the fixture lives in a heated ultrasonic tank, so it has to hold
+  up thermally, chemically, and mechanically in that environment.
+- **Isolate the wear** — something is always going to be scraped by the rotors. Better that
+  it is one cheap part chosen in advance than the whole assembly.
+
+## Design overview
+### The Jig
+
+Each variant is a pair of **towers** on a base plate that drops into the tank. The rotor
+sits down into a tower, and the operator closes the top arm so a small **nub** seats into a
+slot machined to stop the rotor from spinning with the rotating brush. A **locking bar** pushes down to secure the arm, and the whole
+sequence reverses to unload. 
+
+<Figures
+	height={290}
+	caption="Creo assemblies for the two rotor families."
+	items={[
+		{ src: creoAssemblies, alt: 'Two CAD assemblies of the washing jig, one for AMS rotors and one for Gyro rotors' },
+	]}
+/>
+
+<Figures
+	height={420}
+	caption="A rotor loaded in the AMS jig, lever handle clamped."
+	items={[
+		{ src: finalAssembly, alt: 'Gloved hand on the lever handle of the jig with a rotor seated in the tall tower' },
+	]}
+/>
+
+The nub is the one part in constant sliding contact with the rotors, so it was designed
+from the start as a **replaceable wear item**. It is held by a single **wing screw** so it swaps with no tools. 
+
+<Figures
+	height={210}
+	caption="The nub seated in the machined slot on the rotor, constraining rotation against the brush."
+	items={[
+		{ src: nubInSlot, alt: 'Close-up detail of the jig nub engaged in a slot machined into the rotor bore' },
+	]}
+/>
+
+<Figures
+	wide
+	height={420}
+	caption="Lock and release, out of the tank."
+	items={[
+		{
+			video: '/media/washing-jig-use.mp4',
+			poster: '/media/washing-jig-use-poster.jpg',
+			alt: 'The jig lever handles being operated to lock and release a rotor',
+		},
+	]}
+/>
+
+### Material selection
+
+The tank is heated, chemically active, and full of parts being moved around. I tested **ABS**, **ASA**, and **PET-CF** for
+thermal, chemical, and mechanical resistance in the heated bath, and selected **ASA** as
+the best balance of durability against cost.
+
+## Field failures and fixes
+
+The jig held up ergonomically, operators liked it. 
+However, occasional failures led to some redesign. 
+
+### Locking arm fracture
+
+The handle's threaded rod **ripped through the printed arm** due to excessive force during use.
+
+The root cause was simply that the thin arm piece allowed the long threaded rod to leverage the force and rip through the part, so the arm was **thickened to 1″** and the mating slot on the
+holder opened up to match. 1" was chosen since **1″ is a common stock size**, so when this part eventually
+moves to machined aluminum, the machinist never has to face that surface at all.
+
+<Figures
+	wide
+	height={290}
+	items={[
+		{
+			src: armFailure,
+			alt: 'The jig in the tank with its lever handle hanging loose after the arm fractured',
+			caption: 'The failure\nThreaded rod torn through the arm, handle unsupported.',
+		},
+		{
+			src: armRedesign,
+			alt: 'Creo screenshot dimensioning the redesigned arm to one inch thick',
+			caption: 'The fix\nArm thickened to 1″, a stock thickness.',
+		},
+	]}
+/>
+
+### Base holder fracture
+
+A base holder shattered around the rotor bore. The most likely cause
+was a operator untrained on the station forcing the arm outward against its travel.
+
+<Figures
+	height={360}
+	caption="The fractured AMS base holder."
+	items={[
+		{ src: holderFailure, alt: 'A green 3D printed jig base holder cracked apart around its bore' },
+		{ src: holderFailureCloseup, alt: 'Close-up of the fracture surface showing exposed infill inside the broken wall' },
+	]}
+/>
+
+The fix was **1/8″ fillets** on the internal corners to break up the stress concentration,
+plus thicker walls through that region, applied to both the top and bottom holders, since
+they share the same geometry and the same weakness.
+
+<Figures
+	height={240}
+	items={[
+		{
+			src: holderRedesign1,
+			alt: 'Creo screenshot showing a one-eighth inch fillet applied to an internal corner of the holder',
+			caption: 'Internal corners\n1/8″ fillets replacing sharp transitions.',
+		},
+		{
+			src: holderRedesign2,
+			alt: 'Creo section view showing fillets added around the shoulder bolt pocket',
+			caption: 'Shoulder bolt pocket\nFilleted corners and a thicker surrounding wall.',
+		},
+	]}
+/>
+
+### The wear part
+
+The nubs as designed were wearing out, requiring replacements every 2 weeks. They
+scrape the rotor slot on every cycle, so concentrating the wear there means the
+**cheapest and fastest-replaced part** in the assembly is the one that degrades.
+
+<Figures
+	height={330}
+	caption="A new nub next to one pulled from service. Replacing it is a wing screw and about a minute."
+	items={[
+		{ src: nubWear, alt: 'A new jig nub beside a worn one, showing the rounded and shortened fin' },
+	]}
+/>
+
+## Outcome
+
+Both variants are in **daily production use**, deployed for **under $350** in total including the 
+handle, thread rods, base, filament, fasteners, etc.
+
+To keep the process consistent between operators, I authored a **work standard** covering
+the full load, wash, and unload sequence, which brought down the rate of parts needing a
+repeat cleaning.
+
+<Figures
+	wide
+	height={560}
+	caption="The work standard covering rotor seating, nub engagement, brush operation, and removal."
+	items={[
+		{ src: workStandard, alt: 'A six-panel illustrated work instruction for the rotor washing station' },
+	]}
+/>
+
+I also established a **spare parts inventory** with a BOM for instant part replacements to prevent 
+accidental downtime.
+
+<Figures
+	height={270}
+	items={[
+		{
+			src: spareParts,
+			alt: 'A grey bin labelled washing jig spares, filled with printed replacement components',
+			caption: 'Spares parts\nAt least one of every component, ready to swap.',
+		},
+		{
+			src: printedParts,
+			alt: 'A set of freshly printed jig components including a batch of small nubs',
+			caption: 'Printed jig components\nAMS variant.',
+		},
+	]}
+/>
+
+### Next steps
+
+- A **machined aluminum version**, which the current design is already shaped for: 1″ arm
+  stock, internal fillets at common endmill radii, helicoiled threads, and a 4.25″ round
+  stock start for the Gyro top piece.
+- A lift handle so the whole assembly can come out of the tank without anyone reaching into
+  the water. 
+
+### Takeaways
+
+- **Start supplier conversations earlier** RFQs, POs, and
+  back and forth with machine shops can take up to several weeks. I realised too late in the term to get the aluminum version quoted, and that is the
+  thing I would do differently.
+- **Decide in advance which part is allowed to fail.** Despite not having a permanent aluminum 
+  version of the jig, isolating the wear to the nub has greatly increased the longevity of 3D printed components.
