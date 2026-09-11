@@ -1,7 +1,7 @@
 ---
 title: "Pre-Nitriding Rotor Washing Jig"
 order: 3
-summary: "Quick-locking wash fixture for electric actuator rotors, replacing a hands in water cleaning process."
+summary: "Quick-locking wash fixture for electric actuator rotors, replacing a hands-in-water cleaning process."
 tags: ["Creo", "3D Printing", "Fixture Design", "DFM", "Ergonomics"]
 coverImage: ../../assets/Washing Jig/Jig in tank.jpg
 coverAlt: "Two 3D printed jig towers holding rotors, submerged in the ultrasonic washing tank"
@@ -24,25 +24,26 @@ import spareParts from '../../assets/Washing Jig/Spare parts.jpg';
 import printedParts from '../../assets/Washing Jig/Printed parts.png';
 
 During my co-op term at **Dometic Marine**, actuator rotors had to be scrubbed
-completely free of grease and machining debris before nitriding, and the operators were
-doing it by holding each rotor against a rotating brush with their hands in the
-water. Building on an early-stage concept from a previous term, I designed the
-**quick-locking fixture** that went into production.
+completely free of grease and machining debris before nitriding, and operators did this
+by holding each rotor against a rotating brush with their hands in the water. Building on
+an early-stage concept from a previous term, I designed the **quick-locking fixture** that
+went into production.
 
 ## Overview
 
 ### The Problem
 
 Nitriding diffuses nitrogen into the surface of a part to harden it. Any residual grease or
-machining debris left on a rotor **blocks that absorption**, thus the rotors have to be spotless before they reach the furnace.
+machining debris left on a rotor **blocks that absorption**, so the rotors have to be
+spotless before they reach the furnace.
 
 Cleaning happens in an **ultrasonic bath**, with a pneumatic rotating brush run down the
 rotor's internal threads. The original process had operators hold each rotor against that
 brush themselves, submerged, which carried a **repetitive stress injury risk** and
 cleaned the internal threads inconsistently.
 
-There are two rotor families run through the same station: **AMS (45 mm)** and **Gyro** so the jig
-exists in two variants.
+There are two rotor families that run through the same station, **AMS (45 mm)** and
+**Gyro**, so the jig exists in two variants.
 
 <Figures
 	height={430}
@@ -55,7 +56,7 @@ exists in two variants.
 ### Design Objectives
 
 - **Hands out of the water** — the operator must be able to lock and release a rotor
-  without reaching into the bath. 
+  without reaching into the bath.
 - **Survive the bath** — the fixture lives in a heated ultrasonic tank, so it has to hold
   up thermally, chemically, and mechanically in that environment.
 - **Isolate the wear** — something is always going to be scraped by the rotors. Better that
@@ -66,8 +67,8 @@ exists in two variants.
 
 Each variant is a pair of **towers** on a base plate that drops into the tank. The rotor
 sits down into a tower, and the operator closes the top arm so a small **nub** seats into a
-slot machined to stop the rotor from spinning with the rotating brush. A **locking bar** pushes down to secure the arm, and the whole
-sequence reverses to unload. 
+slot machined to stop the rotor from spinning against the rotating brush. A **locking bar**
+pushes down to secure the arm, and the whole sequence reverses to unload.
 
 <Figures
 	height={290}
@@ -86,7 +87,8 @@ sequence reverses to unload.
 />
 
 The nub is the one part in constant sliding contact with the rotors, so it was designed
-from the start as a **replaceable wear item**. It is held by a single **wing screw** so it swaps with no tools. 
+from the start as a **replaceable wear item**. It is held by a single **wing screw**, so it
+swaps with no tools.
 
 <Figures
 	height={210}
@@ -111,22 +113,24 @@ from the start as a **replaceable wear item**. It is held by a single **wing scr
 
 ### Material selection
 
-The tank is heated, chemically active, and full of parts being moved around. I tested **ABS**, **ASA**, and **PET-CF** for
-thermal, chemical, and mechanical resistance in the heated bath, and selected **ASA** as
-the best balance of durability against cost.
+The tank is heated, chemically active, and full of parts being moved around. I tested
+**ABS**, **ASA**, and **PET-CF** for thermal, chemical, and mechanical resistance in the
+heated bath, and selected **ASA** as the best balance of durability against cost.
 
 ## Field failures and fixes
 
-The jig held up ergonomically, operators liked it. 
-However, occasional failures led to some redesign. 
+The jig held up ergonomically, and operators liked it. However, occasional failures led
+to some redesign.
 
 ### Locking arm fracture
 
 The handle's threaded rod **ripped through the printed arm** due to excessive force during use.
 
-The root cause was simply that the thin arm piece allowed the long threaded rod to leverage the force and rip through the part, so the arm was **thickened to 1″** and the mating slot on the
-holder opened up to match. 1" was chosen since **1″ is a common stock size**, so when this part eventually
-moves to machined aluminum, the machinist never has to face that surface at all.
+The root cause was simply that the thin arm piece let the long threaded rod leverage the
+force and rip through the part, so the arm was **thickened to 1″** and the mating slot on
+the holder opened up to match. That thickness wasn't arbitrary: **1″ is a common stock
+size**, so when this part eventually moves to machined aluminum, the machinist never has
+to face that surface at all.
 
 <Figures
 	wide
@@ -147,8 +151,8 @@ moves to machined aluminum, the machinist never has to face that surface at all.
 
 ### Base holder fracture
 
-A base holder shattered around the rotor bore. The most likely cause
-was a operator untrained on the station forcing the arm outward against its travel.
+A base holder shattered around the rotor bore. The most likely cause was an operator
+untrained on the station forcing the arm outward against its travel.
 
 <Figures
 	height={360}
@@ -181,7 +185,7 @@ they share the same geometry and the same weakness.
 
 ### The wear part
 
-The nubs as designed were wearing out, requiring replacements every 2 weeks. They
+The nubs as designed were wearing out, requiring replacements every two weeks. They
 scrape the rotor slot on every cycle, so concentrating the wear there means the
 **cheapest and fastest-replaced part** in the assembly is the one that degrades.
 
@@ -195,8 +199,8 @@ scrape the rotor slot on every cycle, so concentrating the wear there means the
 
 ## Outcome
 
-Both variants are in **daily production use**, deployed for **under $350** in total including the 
-handle, thread rods, base, filament, fasteners, etc.
+Both variants are in **daily production use**, deployed for **under $350** in total,
+including the handle, threaded rods, base, filament, fasteners, etc.
 
 To keep the process consistent between operators, I authored a **work standard** covering
 the full load, wash, and unload sequence, which brought down the rate of parts needing a
@@ -211,8 +215,8 @@ repeat cleaning.
 	]}
 />
 
-I also established a **spare parts inventory** with a BOM for instant part replacements to prevent 
-accidental downtime.
+I also established a **spare parts inventory** with a BOM for instant part replacements,
+to prevent accidental downtime.
 
 <Figures
 	height={270}
@@ -220,7 +224,7 @@ accidental downtime.
 		{
 			src: spareParts,
 			alt: 'A grey bin labelled washing jig spares, filled with printed replacement components',
-			caption: 'Spares parts\nAt least one of every component, ready to swap.',
+			caption: 'Spare parts\nAt least one of every component, ready to swap.',
 		},
 		{
 			src: printedParts,
@@ -236,12 +240,13 @@ accidental downtime.
   stock, internal fillets at common endmill radii, helicoiled threads, and a 4.25″ round
   stock start for the Gyro top piece.
 - A lift handle so the whole assembly can come out of the tank without anyone reaching into
-  the water. 
+  the water.
 
 ### Takeaways
 
-- **Start supplier conversations earlier** RFQs, POs, and
-  back and forth with machine shops can take up to several weeks. I realised too late in the term to get the aluminum version quoted, and that is the
-  thing I would do differently.
-- **Decide in advance which part is allowed to fail.** Despite not having a permanent aluminum 
-  version of the jig, isolating the wear to the nub has greatly increased the longevity of 3D printed components.
+- **Start supplier conversations earlier.** RFQs, POs, and back-and-forth with machine
+  shops can take up to several weeks. I realized too late in the term to get the aluminum
+  version quoted, and that is the thing I would do differently.
+- **Decide in advance which part is allowed to fail.** Despite not having a permanent
+  aluminum version of the jig, isolating the wear to the nub has greatly increased the
+  longevity of 3D printed components.
