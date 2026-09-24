@@ -1,10 +1,10 @@
 ---
 title: "SCADA Auto Data Downloader"
-order: 4
-summary: "Ignition SCADA tool that moves machine network data to the office network on a nightly schedule, replacing a daily manual export for Power BI reporting."
+order: 5
+summary: "Ignition SCADA tool that automatically downloads machine network data, replacing a daily manual export for Power BI analysis."
 tags: ["Ignition SCADA", "Python", "SQL", "UI Design", "Automation"]
-coverImage: ../../assets/Data Downloader/Quick access.png
-coverAlt: "The rebuilt data downloader interface showing grouped one-click download buttons"
+coverImage: ../../assets/Data Downloader/Auto-download settings.png
+coverAlt: "The Auto-Download Settings tab with the Auto/Off toggle, past data range, and dataset checklist"
 ---
 
 import Figures from '../../components/Figures.astro';
@@ -13,10 +13,11 @@ import quickAccess from '../../assets/Data Downloader/Quick access.png';
 import tagHistory from '../../assets/Data Downloader/Tag history.png';
 import databaseBrowser from '../../assets/Data Downloader/Database browser.png';
 import autoSettings from '../../assets/Data Downloader/Auto-download settings.png';
+import timerCode from '../../assets/Data Downloader/3AM code.png';
 
-At **Dometic Marine**, production data lives on the SCADA machine network while the
-Power BI reporting that depends on it lives on the office network. Somebody had to carry
-the data across by hand, every day. I built the tool that does it on a schedule instead,
+At **Dometic Marine**, production data lives on the SCADA OT network, while the
+Power BI reports that depend on it live on the IT network. Someone had to manually
+export that data every day. I built the tool that does it on a schedule instead,
 then rebuilt the interface around it.
 
 ## Overview
@@ -24,22 +25,19 @@ then rebuilt the interface around it.
 ### The Problem
 
 Inspection results, attainment figures, and machine tag history are all recorded on the
-machine network. The analyst who owned the Power BI reporting had no automated route to
-any of it, so every refresh started with a person opening a downloader, picking a date
-range, and exporting the datasets one at a time.
+machine network, which had to be **manually downloaded for Power BI analysis**.
 
-That was repetitive, and it capped how current the reports could be. They were only ever
-as fresh as the last time someone remembered to run the export.
+That was **repetitive**, and could leave the reports out of date if nobody remembered to run the export.
 
-A downloader already existed and worked, but everything sat on a single window. Every
+The existing manual downloader also crammed all of its functionality into a single window. Every
 button repeated the phrase `from database to "C:\output"`, which pushed the actual dataset
-name to the end where it was hardest to scan. A raw OPC tag list, the database picker, and
+name to the end. A raw OPC tag list, the database picker, and
 the table picker all competed for the same screen.
 
 <Figures
 	wide
 	height={480}
-	caption="The original interface. One window, and every button restating where the file lands."
+	caption="The original interface."
 	items={[
 		{ src: before, alt: 'The original data downloader window with a dense grid of long buttons, a tag list, and database and table pickers' },
 	]}
@@ -49,26 +47,32 @@ the table picker all competed for the same screen.
 
 The automated job runs on the **IT gateway PC**, the one machine that can see both
 networks, and pulls a configurable window of history into `C:\output` every night at
-**3:00 AM**. Most of the work was in the details that decide whether an unattended job is
-actually trustworthy.
+**3:00 AM**.
 
 - **A timer script ticks every minute** and does nothing unless the hour is 3 and the
-  minute is 0. Simple, and it means the job still fires correctly no matter when the
-  client was last restarted.
-- **The client gates itself on its own hostname.** At startup it checks which machine it
+  minute is 0, a simple way to trigger the job at 3 AM every day.
+- **The client gates itself by hostname.** At startup it checks which machine it
   is running on, enabling auto mode on the gateway PC and falling back to manual
-  everywhere else. One project and one client covering both behaviours, rather than a
-  separate build to keep in sync.
+  everywhere else.
 - **An overnight job must never wait on a dialog.** Every message box in the auto-download
   path was replaced with console output, since a popup at 3 AM would block the run until
   somebody dismissed it the next morning.
-- **A reboot failsafe.** Ignition starts checkboxes unchecked, so if the gateway PC ever
-  restarted, the downloader would have come back up with every dataset deselected and
-  quietly stopped downloading, with no error to notice. The startup script now
-  force-selects them.
-- **The settings window is deliberately kept open.** It cannot be closed, and clicking
-  outside it minimises it instead, because the timer script reads the schedule and the
-  dataset selections directly off those components.
+- **A reboot failsafe.** Ignition starts checkboxes unchecked, so a gateway restart would
+  bring the downloader back up with every dataset deselected, silently stopping it. The
+  startup script instead force-selects them.
+- **The settings window is deliberately kept open.** Ignition doesn't allow this type of
+  window to be closed outright, so clicking outside it only minimizes it, which looks the
+  same to the user as closing it. The components stay alive underneath because the timer
+  script reads the schedule and dataset selections directly off them.
+
+<Figures
+	wide
+	height={600}
+	caption="The client timer script in Ignition Designer."
+	items={[
+		{ src: timerCode, alt: 'Ignition Designer client timer script that reads the settings components and, when the hour is 3 and the minute is 0, downloads each selected dataset' },
+	]}
+/>
 
 The settings tab exposes the parts an operator should control: an auto/off toggle, the
 range of past data to pull, and which datasets are included. The range accepts anything
@@ -76,8 +80,8 @@ from 1 to 365 days, with a 30 day default.
 
 <Figures
 	wide
-	height={480}
-	caption="Auto-download settings: the toggle, the range of past data, and per dataset selection."
+	height={500}
+	caption="Auto-download settings: the toggle, the range of past data, and dataset selection."
 	items={[
 		{ src: autoSettings, alt: 'The Auto-Download Settings tab showing an Auto/Off toggle, a 30 day range entry, and a checklist of datasets' },
 	]}
@@ -85,47 +89,40 @@ from 1 to 365 days, with a 30 day default.
 
 ## Rebuilding the interface
 
-The manual downloader was still worth keeping for one-off pulls, so it was reorganised
-rather than removed. One crowded window became **four tabs**: Quick Access, Tag History,
+The manual downloader was still worth keeping for flexibility. It was reorganized into **four tabs**: Quick Access, Tag History,
 Database, and Auto-Download Settings.
 
-Stating the `C:\output` destination once in a header, instead of on every button, let each
-button shrink to just the name of the dataset it fetches. The same grid now reads at a
-glance.
+Stating the `C:\output` destination once in a header, instead of on every button, improved
+readability and left room to add more data types later.
 
 <Figures
 	wide
-	height={480}
-	caption="Quick Access: one button per dataset, with the destination stated once at the top."
+	height={500}
+	caption="Quick Access."
 	items={[
 		{ src: quickAccess, alt: 'The rebuilt Quick Access tab with three columns of short, clearly named download buttons' },
 	]}
 />
 
-The OPC tag history selector moved onto its own tab, where the list finally has the width
-to show full tag paths without truncating them.
+The OPC tag history selector moved onto its own tab to show full tag paths without truncating them.
 
 <Figures
 	wide
-	height={480}
-	caption="Tag History, with the OPC tag list given a full width column."
+	height={500}
+	caption="Tag History."
 	items={[
 		{ src: tagHistory, alt: 'The Tag History tab showing a full width scrollable list of OPC tag paths and a download button' },
 	]}
 />
 
-I also added a **generic database and table browser**. Rather than hardcoding another
-button for every new dataset, it queries `INFORMATION_SCHEMA` to populate both pickers, so
-tables added later show up on their own with no code change. The date range is bound as
-query parameters.
-
-Alongside that, the downloader's coverage was expanded with the end-of-line test datasets
-(**HELM**, **EPS HELM**, **X30**, **X30 Fuel Pump**, **X30 Compressor**, **SPA**, and
-**Pivot**) and scrap issue transactions.
+Alongside that, a **generic database and table browser** now queries the schema directly
+instead of relying on hardcoded buttons, and dataset coverage was expanded with the
+end-of-line test lines (**HELM**, **EPS HELM**, **X30**, **X30 Fuel Pump**, **X30
+Compressor**, **SPA**, and **Pivot**) plus scrap issue transactions.
 
 <Figures
 	wide
-	height={480}
+	height={500}
 	caption="The database browser, populated by querying the schema rather than a hardcoded list."
 	items={[
 		{ src: databaseBrowser, alt: 'The Database tab with a list of database connections beside a list of available tables' },
@@ -134,14 +131,15 @@ Alongside that, the downloader's coverage was expanded with the end-of-line test
 
 ## Outcome
 
-Manual data retrieval is gone. The selected datasets land on the gateway PC every night at
-3:00 AM, ready for Power BI to pick up, and the reporting no longer depends on somebody
-remembering to run an export. The manual path is still there when a specific range is
-needed, and it is considerably quicker to drive than it was.
+Manual data retrieval is now **fully automated**. The selected datasets land on the
+gateway PC every night at 3:00 AM, ready for Power BI to pick up. The manual path is
+still there for one-off pulls, or to reach datasets outside the automated set.
 
-Two things cost more time than the scripting did. The first was the **Ignition Designer
-learning curve**, since the Vision module's scripting model and component hierarchy were
-both new to me. The second was deployment: the gateway PC needed **selective auto-login**
-configured so that the Vision client is actually running and logged in overnight. A
-scheduled job is worth nothing if nothing is awake at 3 AM to run it.
+### Challenges
+
+- **The Ignition Designer learning curve** — the Vision module's scripting model and
+  component hierarchy were both new to me.
+- **Gateway deployment** — the gateway PC needed selective auto-login configured so the
+  Vision client launches and signs in automatically on boot, while every other station
+  keeps standard password login for security.
 

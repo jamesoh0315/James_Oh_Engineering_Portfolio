@@ -20,6 +20,10 @@ const hasMore = projects.length > HOMEPAGE_LIMIT;
 	<Hero />
 
 	<div class="mx-auto max-w-[1300px] px-5 sm:px-8 lg:px-12">
+		<p class="mb-6 border-l-2 border-signal py-1 pl-4 text-[0.92rem] text-chalk">
+			Built with Astro and Tailwind CSS, deployed on Vercel, working alongside
+			Claude Code.
+		</p>
 		{hasOverviewPdf() && <DeckBanner />}
 	</div>
 

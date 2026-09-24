@@ -1,29 +1,26 @@
 ---
 import { Image } from 'astro:assets';
 import { SITE } from '../consts';
-import chuck from '../assets/Hybrid/ChuckTest.JPG';
-import liner from '../assets/Hybrid/MetalLiner.jpg';
+import cover from '../assets/Mars Robot/Cover.jpg';
+import heroInset from '../assets/Hero Page/Screenshot 2026-03-27 165446.png';
 
 /**
  * Hero previews.
  *
  * The first entry is the main plate; everything after renders as an overlapping
- * inset at its lower left. Adding a preview is another entry here, and the
- * insets stack.
- *
- * The plate is capped and pushed to the right of its column so the insets hang
- * into the gutter between the two columns rather than over the headline.
+ * inset at its lower left, partially covering the plate. Adding a preview is
+ * another entry here, and the insets stack.
  */
 const previews = [
 	{
-		src: chuck,
-		alt: 'Hybrid liner assembly fit tested at the chuck end of a CNC lathe',
+		src: cover,
+		alt: 'The finished Mars Habitat Robot on a bench, showing its camera mast, arm, and mixed wheel set',
 		caption: null,
 	},
 	{
-		src: liner,
-		alt: 'The delivered metal spindle liner',
-		caption: 'Metal liner as delivered',
+		src: heroInset,
+		alt: 'James fitting a coilover shock into the suspension of the UBC BAJA vehicle',
+		caption: 'Working on the BAJA car',
 	},
 ];
 
@@ -35,7 +32,7 @@ const [plate, ...insets] = previews;
 		<div>
 			<p class="rise mb-5 inline-flex items-center gap-2.5 text-[0.92rem] text-fog">
 				<span class="block h-2 w-2 flex-none bg-signal" aria-hidden="true"></span>
-				Seeking Spring / Summer 2027 internships
+				Seeking Summer 2027 internships
 			</p>
 
 			<h1
@@ -76,20 +73,20 @@ const [plate, ...insets] = previews;
 		</div>
 
 		<div class="rise relative mx-auto w-full max-w-[22rem] lg:mx-0 lg:ml-auto lg:max-w-[26rem] [animation-delay:120ms]">
-			<figure class="m-0 aspect-[4/3] overflow-hidden rounded-lg bg-surface lg:aspect-[3/4]">
+			<figure class="m-0 aspect-[4/3] overflow-hidden rounded-lg bg-ink lg:aspect-[3/4]">
 				<Image
 					src={plate.src}
 					alt={plate.alt}
 					widths={[500, 900, 1400]}
 					sizes="(min-width: 1024px) 26rem, 90vw"
 					loading="eager"
-					class="h-full w-full object-cover"
+					class="h-full w-full object-contain"
 				/>
 			</figure>
 
 			{
 				insets.length > 0 && (
-					<div class="absolute -left-12 bottom-6 hidden w-[9.5rem] space-y-2 lg:block">
+					<div class="absolute bottom-[12%] -left-8 hidden w-[9.5rem] space-y-2 lg:block">
 						{insets.map((item) => (
 							<div class="rounded-lg bg-ink p-1.5">
 								<figure class="m-0 aspect-[3/4] overflow-hidden rounded">
@@ -103,7 +100,7 @@ const [plate, ...insets] = previews;
 									/>
 								</figure>
 								{item.caption && (
-									<figcaption class="pt-1.5 text-[0.74rem] leading-snug text-fog">
+									<figcaption class="pt-1.5 text-center text-[0.74rem] leading-snug text-fog">
 										{item.caption}
 									</figcaption>
 								)}

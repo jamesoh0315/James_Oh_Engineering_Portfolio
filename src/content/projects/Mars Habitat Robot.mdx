@@ -1,0 +1,464 @@
+---
+title: "Mars Habitat Robot — ENPH 253"
+order: 1
+summary: "Autonomous robot built from scratch in six weeks, navigating a simulated Mars site to assemble habitat modules, uncover solar panels, and find hidden targets."
+tags: ["Onshape", "SolidWorks", "Robotics", "KiCad", "Computer Vision"]
+coverImage: ../../assets/Mars Robot/Cover.jpg
+coverAlt: "The finished competition robot on a bench, showing its camera mast, arm, and mixed wheel set"
+---
+
+import Figures from '../../components/Figures.astro';
+import cover from '../../assets/Mars Robot/Cover.jpg';
+import surfaceDiagram from '../../assets/Mars Robot/Surface diagram.jpg';
+import compSurface from '../../assets/Mars Robot/Comp surface.jpg';
+import cadRender from '../../assets/Mars Robot/CAD render.png';
+import cadOnSurface from '../../assets/Mars Robot/CAD on surface.png';
+import wheelPlacement from '../../assets/Mars Robot/Wheel placement.jpg';
+import driveSystem from '../../assets/Mars Robot/Drive system.jpg';
+import driveDetail from '../../assets/Mars Robot/Drive detail.jpg';
+import armCad from '../../assets/Mars Robot/Arm CAD.jpg';
+import armLiftCad from '../../assets/Mars Robot/Arm lift CAD.jpg';
+import armTorque from '../../assets/Mars Robot/Arm torque.jpg';
+import arm from '../../assets/Mars Robot/Arm.jpg';
+import sheetMetal from '../../assets/Mars Robot/Sheet metal chassis.jpg';
+import hbridgeLayout from '../../assets/Mars Robot/H-bridge layout.png';
+import boosterLayout from '../../assets/Mars Robot/Booster layout.png';
+import hbridgeBoards from '../../assets/Mars Robot/H-bridge boards.jpg';
+import boosterBoard from '../../assets/Mars Robot/Booster board.jpg';
+import ioDiagram from '../../assets/Mars Robot/IO diagram.jpg';
+import power from '../../assets/Mars Robot/Power.jpg';
+import irArrayPcb from '../../assets/Mars Robot/IR array PCB.jpg';
+import inputBoard from '../../assets/Mars Robot/Input board.jpg';
+import inputBoardInside from '../../assets/Mars Robot/Input board inside.jpg';
+import cameraEnclosure from '../../assets/Mars Robot/Camera enclosure.jpg';
+import visionDebug from '../../assets/Mars Robot/Vision debug.png';
+import robotWithDome from '../../assets/Mars Robot/Robot with dome.png';
+
+**ENPH 253** is a six-week summer course where teams build an autonomous robot from nothing
+and then race it head to head. The 2026 brief was a simulated Mars construction site: cross
+rough terrain, assemble a habitat, uncover a solar panel, recover a metal-bearing rock, and
+find the Teletubbies hiding behind the boulders. Two-minute heats, no remote control, a $200
+budget, and three people.
+
+<Figures
+	wide
+	height={470}
+	caption="The finished robot."
+	items={[
+		{ src: cover, alt: 'The competition robot on a bench, with its camera mast, grabber arm, user input board and mixed wheel set' },
+	]}
+/>
+
+## Overview
+
+### The competition
+
+The course is an 8 by 8 ft board with a black tape path, a ramp, and a floor raised 6″ above
+the lower level. Robots score by assembling a four-piece habitat dome, stacking nesting tower
+tubes, pulling a fabric cover off a solar panel, recovering the one boulder with aluminium
+hidden inside it, and pointing out two Teletubbies.
+
+The Teletubbies carry a rule worth noting, because it drove the entire vision design: a robot
+announces one by flashing a light at least three times, and **a single false alarm nulls every
+Teletubby point you have earned**.
+
+<Figures
+	height={295}
+	items={[
+		{
+			src: surfaceDiagram,
+			alt: 'Competition surface diagram showing the tape path, ramp, elevated floor, boulders, and build areas',
+			caption: 'The course\nTape path, ramp, and a floor raised 6″.',
+		},
+		{
+			src: compSurface,
+			alt: 'The robot sitting on the real competition surface with boulders and the tape path visible',
+			caption: 'The real thing\nCompetition day, on the lower level.',
+		},
+	]}
+/>
+
+### Strategy and my scope
+
+The proposal set a deliberate target: **reliably score six points** rather than chase all
+five objectives and finish with nothing working. That shaped what we built and what we left
+alone. We never attempted the tower or the metal rock.
+
+This was a three-person project. My scope was the **mechanical design and fabrication**, the
+**vision system**, the **custom PCBs**, and the **electromechanical modules**. The navigation
+and mission firmware that drives the robot around the course was a teammate's work, and the
+robot only scores because that half works too.
+
+## Mechanical design
+
+<Figures
+	wide
+	height={280}
+	items={[
+		{
+			src: cadRender,
+			alt: 'CAD render of the finished robot showing the chassis, wheels, arm linkage, camera mast and boards',
+			caption: 'The assembly\nEverything packaged onto a plate under 18″ in every direction.',
+		},
+		{
+			src: cadOnSurface,
+			alt: 'CAD view of the robot placed on a model of the competition surface with the ramp and boulders',
+			caption: 'On the course\nThe surface modelled too, to check reach and clearances.',
+		},
+	]}
+/>
+
+### Chassis and drivetrain
+
+Both the wheelbase and the track came out at **10″**, each for its own reason. Short enough
+that the robot does not bottom out crossing the ramp break. Long enough to resist tipping
+under hard acceleration. Narrow enough that the overall width stays under 12″, which matters
+because the rules only promise 6″ of clearance between the tape and the boulders.
+
+Ground clearance follows from the ramp geometry rather than taste. Bridging a break angle
+needs at least **0.3112″** underneath, which set the floor for wheel size.
+
+<Figures
+	height={320}
+	caption="Wheelbase and track, both 10″, each dimension driven by a different constraint."
+	items={[
+		{ src: wheelPlacement, alt: 'Diagram of the 10 inch wheelbase and 10 inch track with wheel positions marked' },
+	]}
+/>
+
+Sizing the drive was a torque problem. At an estimated **3 kg** and 85% drivetrain efficiency,
+each wheel needs about **0.089 Nm** to climb the 7.1° ramp, against **0.24 Nm** of stall torque
+per motor. That is a **2.7× margin**, which then sets the speed: roughly 281 rpm under load,
+about **1.21 m/s**, enough to cover the 18 ft tape run in **7.5 s** while cruising at 60% of
+maximum.
+
+<Figures
+	wide
+	height={265}
+	items={[
+		{
+			src: driveSystem,
+			alt: 'Annotated CAD of the drivetrain showing track wheels, omni wheels, motors, and the 10 inch wheelbase and track',
+			caption: 'Drivetrain layout\nDriven track wheels, trailing omni wheels.',
+		},
+		{
+			src: driveDetail,
+			alt: 'CAD detail of a drive module showing the gear pair, slotted sheet metal bracket, and printed motor support',
+			caption: 'Drive module\nSheet metal brackets, printed motor support, slotted for gearing.',
+		},
+	]}
+/>
+
+The detail I am most glad about is the **slotted motor brackets**. Rather than commit to a
+gear ratio in CAD and hope the mesh was right, the slots let the motor position move after
+assembly, and I printed a sweep of spacers from **7.5 mm to 17 mm in half-millimetre steps** to
+set the centre distance empirically on the built robot. Gear mesh is exactly the kind of thing
+that is easier to dial in by hand than to predict.
+
+### Arm and grabber
+
+The habitat pieces sit on a ring and hold to each other magnetically, so placing one is not a
+simple pick and drop. The arm has to bring a piece in, seat it, and rotate the pieces already
+on the ring out of the way to make room for the next.
+
+Lifting a **165 g** piece at the worst-case lever arm needs about **0.134 Nm**, which set the
+servo choice.
+
+<Figures
+	wide
+	height={330}
+	caption="Working the worst-case arm torque out by hand before choosing a servo."
+	items={[
+		{ src: armTorque, alt: 'Handwritten torque calculation for the lifting arm, working through geometry to about 0.134 Nm' },
+	]}
+/>
+
+<Figures
+	wide
+	height={310}
+	items={[
+		{
+			src: armCad,
+			alt: 'CAD of the proposed arm showing the rack and pinion, high torque servo, and support structures',
+			caption: 'Proposed\nRack and pinion on a high-torque servo.',
+		},
+		{
+			src: armLiftCad,
+			alt: 'CAD showing the lifting arm and its sweep envelope',
+			caption: 'Sweep envelope\nReach checked against the build area.',
+		},
+	]}
+/>
+
+**The built arm is not the proposed one.** The proposal specified a scooping grabber on a rack
+and pinion. What went to competition is a belt-driven parallel linkage running on GT2 pulleys,
+with a two-finger fork gripper on the end. The linkage keeps the gripper level through its
+travel, which a single pivoting arm does not, and that matters when the thing you are carrying
+has to stay square to a magnetic joint.
+
+<Figures
+	wide
+	height={430}
+	caption="The arm as built: a belt-driven parallel linkage with a fork gripper, off the robot."
+	items={[
+		{ src: arm, alt: 'The arm assembly off the robot, showing GT2 pulleys, belt-driven parallel linkage, servo, and fork gripper' },
+	]}
+/>
+
+### Fabrication
+
+Parts came off whatever process suited them: 3D printing for the brackets, enclosures and
+gripper, laser cutting and waterjetting for flat plate, and the lathe for turned bushings.
+
+<Figures
+	wide
+	height={335}
+	items={[
+		{
+			src: sheetMetal,
+			alt: 'A waterjet cut sheet metal chassis plate with bend tabs, adjustment slots and lightening cutouts',
+			caption: 'Sheet metal chassis plate\nBend tabs, adjustment slots, lightening cutouts.',
+		},
+		{
+			video: '/media/mars-robot-lathe.mp4',
+			poster: '/media/mars-robot-lathe-poster.jpg',
+			alt: 'Turning a bushing on a lathe',
+			caption: 'Turning a bushing\nOne of the few parts worth making subtractively.',
+		},
+	]}
+/>
+
+## Electronics
+
+### Custom PCBs
+
+The course **bans off-the-shelf H-bridge driver chips**, so the motor driver had to be built
+from discrete parts. That constraint has a consequence that is easy to miss until you draw it:
+with only **NPN** devices available, switching the high side needs a gate voltage above the
+motor rail. You cannot turn the top of the bridge fully on from the same supply it is
+switching.
+
+So the H-bridge board takes **two** inputs, 15V for the motors and 20V for gate drive, and a
+second board exists purely to make that 20V. The booster is a **555-based boost converter**
+feeding the bridge's 2N3904 drivers, which in turn drive the IRFZ44 power MOSFETs. Both boards
+were laid out in KiCad and sent out with fab outputs and a BOM.
+
+<Figures
+	wide
+	height={370}
+	items={[
+		{
+			src: hbridgeLayout,
+			alt: 'KiCad layout of the H-bridge board showing IRFZ44 MOSFETs, 2N3904 drivers, and separate 15V and 20V inputs',
+			caption: 'H-bridge\nIRFZ44 power stage, 2N3904 gate drive, separate 15V and 20V inputs.',
+		},
+		{
+			src: boosterLayout,
+			alt: 'KiCad layout of the booster board showing the 555 timer, inductor, and output stage',
+			caption: 'Booster\n555-based boost, built only to get gate drive above the rail.',
+		},
+	]}
+/>
+
+<Figures
+	wide
+	height={340}
+	items={[
+		{
+			src: hbridgeBoards,
+			alt: 'Two populated H-bridge boards on a bench with MOSFETs and JST connectors fitted',
+			caption: 'Populated H-bridges\nOne per drive motor.',
+		},
+		{
+			src: boosterBoard,
+			alt: 'The populated booster board showing the timer ICs, inductor and electrolytic capacitor',
+			caption: 'Populated booster',
+		},
+	]}
+/>
+
+### Sensing and power
+
+Tape following runs on **five IR phototransistors** straight into the ADC, with a BNO055 IMU
+for heading and wheel encoders for distance. Switches go through Schmitt triggers so a noisy
+edge cannot register twice. Adding it up, the ESP32-S3 ends up at **21 of 28 GPIO**, 5 of 10
+ADC1 channels, 2 of 4 pulse counters and 2 of 6 MCPWM units, which is worth knowing before you
+find out the hard way that you have run out of timers.
+
+Power is split deliberately. A **4S pack runs the motors, a 2S pack runs everything else**, and
+the grounds meet at the battery negatives rather than anywhere convenient, so motor current
+does not return through the sensing rails. Each load gets its own regulator, which is why an
+ESP32-CAM current spike cannot brown out the main controller.
+
+<Figures
+	wide
+	height={470}
+	caption="I/O budget: what is connected to what, and what is left over."
+	items={[
+		{ src: ioDiagram, alt: 'Hand drawn block diagram of the ESP32 I/O allocation across motors, encoders, IR array, camera, IMU and switches' },
+	]}
+/>
+
+<Figures
+	wide
+	height={430}
+	caption="Power architecture: two packs, split rails, and grounds meeting at the batteries."
+	items={[
+		{ src: power, alt: 'Hand drawn power architecture showing the two battery packs, boost circuit, buck converters and separate LDO rails' },
+	]}
+/>
+
+<Figures
+	height={300}
+	caption="IR array board. Five emitter and phototransistor pairs, laid out to sit across the tape."
+	items={[
+		{ src: irArrayPcb, alt: 'KiCad layout of the IR array board with five emitter and phototransistor channels' },
+	]}
+/>
+
+### Electromechanical modules
+
+Two modules exist purely because a competition robot gets handled by a person under time
+pressure. The **user input board** puts calibration and program selection on physical toggle
+switches with an engraved panel, plus an LED and a speaker so the robot can announce a
+Teletubby without anyone watching a laptop.
+
+The **camera module** is an ESP32-CAM and its decoupling capacitors on protoboard, inside a
+printed enclosure that keeps the TX/RX lines and the flashing header reachable. Reflashing the
+camera never requires taking the robot apart, which matters when you are tuning vision at the
+venue.
+
+<Figures
+	wide
+	height={320}
+	items={[
+		{
+			src: inputBoard,
+			alt: 'The user input board with engraved TEAM 16 panel, toggle switches labelled Calibrate and Program, a speaker and an LED',
+			caption: 'User input board\nCalibrate and program select on real switches.',
+		},
+		{
+			src: inputBoardInside,
+			alt: 'The back of the user input board showing the protoboard wiring inside the enclosure',
+			caption: 'Inside\nProtoboard, wired to the main controller.',
+		},
+	]}
+/>
+
+<Figures
+	height={430}
+	caption="The camera module: printed enclosure on a tilt mount, with the flashing header still reachable."
+	items={[
+		{ src: cameraEnclosure, alt: 'The printed two-part camera enclosure on its tilt mount with the lens visible' },
+	]}
+/>
+
+## Target detection
+
+Everything about the vision system follows from one rule: a false alarm nulls every Teletubby
+point. That makes this a **precision problem, not a recall problem**. A detector that finds one
+of the two Teletubbies and is never wrong beats a detector that finds both and occasionally
+shouts at a boulder.
+
+The ESP32-CAM converts each frame to HSV, classifies pixels through a per-colour lookup table,
+merges neighbouring fragments that belong to the same object, then scores what is left. A
+candidate is only accepted if it passes on area, fill percentage and aspect ratio, and every
+rejection carries a named reason: `too-small`, `too-big`, `low-fill`, `bad-aspect`,
+`edge-of-range`.
+
+The decision I would defend hardest is that **the highest-confidence blob wins, not the largest
+one**. A wall, a person, or a stretch of floor in roughly the right hue will out-area a small
+doll every time, so picking by size hands the frame to the background. Confidence combines how
+closely the hue matches, how solidly the blob fills its own bounding box, and whether its
+proportions look like a doll rather than a smear.
+
+Those thresholds could never be set in a lab. The venue's lighting was not going to match the
+bench, so the camera hosts a **Wi-Fi debug and tuning page** that shows the live frame, the
+per-colour numbers, and which candidates were thrown out and why. Limits get set against the
+actual course, then persist to flash. The banner across the top is a reminder to turn the radio
+off before a heat.
+
+<Figures
+	wide
+	height={400}
+	caption="The Wi-Fi tuning page: live frame, per-colour confidence and geometry, and the rejection tally."
+	items={[
+		{ src: visionDebug, alt: 'The Teletubby Vision web page showing a live camera frame with detection boxes around two dolls, a per-colour telemetry table, and a rejection count' },
+	]}
+/>
+
+## Outcome
+
+The robot scored **six points across the competition rounds**, against a historical mean of
+zero: **two for uncovering the solar panel, two for habitat pieces placed, and two for finding
+both Teletubbies.**
+
+<Figures
+	wide
+	height={420}
+	caption="Placing habitat pieces on the ring during the scoring run."
+	items={[
+		{
+			video: '/media/mars-robot-habitat.mp4',
+			poster: '/media/mars-robot-habitat-poster.jpg',
+			alt: 'The robot working at the habitat build area, placing a dome piece onto the ring',
+		},
+	]}
+/>
+
+The solar panel was the most satisfying one to watch. Its location is only given away by an
+infrared beacon, and the cover comes off by hooking a small fabric loop, so the robot has to
+find the panel by signal and then land the gripper on a target about an inch across.
+
+<Figures
+	wide
+	height={420}
+	caption="The cover coming off the solar panel. Two points, and the hardest single action on the course."
+	items={[
+		{
+			video: '/media/mars-robot-solar.mp4',
+			poster: '/media/mars-robot-solar-poster.jpg',
+			alt: 'The robot pulling the fabric cover off the solar panel, leaving the panel face exposed',
+		},
+	]}
+/>
+
+It did not go cleanly every time. In earlier runs on the competition surface the robot would
+navigate the whole course correctly, reach the panel, and fail to get the cover off, which is
+why the six points came across two rounds rather than one. Tape following itself was the part
+that stayed solid throughout.
+
+<Figures
+	wide
+	height={420}
+	caption="Tape following on the lower level during an earlier test run."
+	items={[
+		{
+			video: '/media/mars-robot-navigation.mp4',
+			poster: '/media/mars-robot-navigation-poster.jpg',
+			alt: 'The robot following the black tape path across the lower level of the competition surface',
+		},
+	]}
+/>
+
+<Figures
+	wide
+	height={400}
+	caption="On the course beside an assembled habitat dome."
+	items={[
+		{ src: robotWithDome, alt: 'The robot on the competition surface next to an assembled black habitat dome' },
+	]}
+/>
+
+### What I'd take away
+
+- **Build the tuning interface before you need it.** The vision thresholds that worked on a
+  bench were never going to survive the venue's lighting, and the thing that made them fixable
+  was a debug page that showed why a candidate was rejected, not just whether it was. Being
+  able to change the answer on site was worth more than getting it right in advance.
+- **Leave a dimension adjustable when you know you are guessing.** Slotting the motor brackets
+  and printing a sweep of spacers cost an afternoon and removed gear mesh from the list of
+  things that could go wrong permanently. The alternative was reprinting a bracket every time
+  the ratio changed.
+- **Scope is a design decision.** Targeting six reliable points instead of all five objectives
+  is why there was time to make the parts we did build work. Most teams scored zero.
