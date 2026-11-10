@@ -1,0 +1,128 @@
+---
+import { Image } from 'astro:assets';
+import { captionLines } from '../utils/caption';
+
+/**
+ * A handful of images in one frame, stepped through with prev/next arrows
+ * instead of laid out side by side. Reach for this when a `Figures` row would
+ * otherwise need a third slot that doesn't have room, or when several images
+ * are really alternate views of the same thing rather than distinct subjects.
+ *
+ * The frame's width is fixed to whichever slide is widest at `height`, so
+ * stepping between slides never resizes the box — narrower slides letterbox
+ * inside it instead.
+ *
+ *   <Carousel
+ *     height={240}
+ *     caption="Final chassis CAD"
+ *     items={[
+ *       { src: chassisBottom, alt: '...' },
+ *       { src: chassisIso, alt: '...' },
+ *     ]}
+ *   />
+ */
+
+interface Props {
+	items: { src: ImageMetadata; alt: string }[];
+	caption?: string;
+	height?: number;
+}
+
+const { items, caption, height = 260 } = Astro.props;
+
+const frameWidth = Math.max(...items.map((item) => (item.src.width / item.src.height) * height));
+---
+
+<figure class="not-prose m-0 max-w-full">
+	<div
+		class="relative mx-auto max-w-full overflow-hidden rounded-lg border border-line bg-surface p-1.5"
+		style={`width: ${frameWidth}px;`}
+		data-carousel
+	>
+		<div class="relative" style={`height: ${height}px;`}>
+			{
+				items.map((item, i) => (
+					<Image
+						src={item.src}
+						alt={item.alt}
+						loading="lazy"
+						class="absolute inset-0 m-auto h-auto max-h-full w-auto max-w-full rounded object-contain transition-opacity duration-200"
+						data-slide={i}
+						style={{ opacity: i === 0 ? '1' : '0', pointerEvents: i === 0 ? 'auto' : 'none' }}
+					/>
+				))
+			}
+		</div>
+
+		{
+			items.length > 1 && (
+				<Fragment>
+					<button
+						type="button"
+						data-prev
+						aria-label="Previous image"
+						class="absolute left-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-ink/70 text-chalk opacity-70 transition-opacity duration-150 hover:bg-ink/90 hover:opacity-100 focus-visible:opacity-100"
+					>
+						<span aria-hidden="true">‹</span>
+					</button>
+					<button
+						type="button"
+						data-next
+						aria-label="Next image"
+						class="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-ink/70 text-chalk opacity-70 transition-opacity duration-150 hover:bg-ink/90 hover:opacity-100 focus-visible:opacity-100"
+					>
+						<span aria-hidden="true">›</span>
+					</button>
+					<span
+						data-counter
+						class="pointer-events-none absolute bottom-2 right-2 rounded bg-ink/70 px-1.5 py-0.5 text-[0.72rem] text-fog"
+					>
+						1 / {items.length}
+					</span>
+				</Fragment>
+			)
+		}
+	</div>
+
+	{
+		caption && (
+			<figcaption class="mt-2.5 text-center text-[0.85rem] leading-snug text-fog">
+				{captionLines(caption).map((line, i) => (
+					<Fragment>
+						{i > 0 && <br />}
+						<span class:list={[i === 0 && 'font-semibold text-[0.92rem] text-chalk']}>{line}</span>
+					</Fragment>
+				))}
+			</figcaption>
+		)
+	}
+</figure>
+
+<script>
+	function initCarousels(root: ParentNode) {
+		root.querySelectorAll<HTMLElement>('[data-carousel]').forEach((el) => {
+			if (el.dataset.carouselInit) return;
+			el.dataset.carouselInit = 'true';
+
+			const slides = Array.from(el.querySelectorAll<HTMLElement>('[data-slide]'));
+			const counter = el.querySelector<HTMLElement>('[data-counter]');
+			let index = 0;
+
+			function show(i: number) {
+				index = (i + slides.length) % slides.length;
+				slides.forEach((slide, j) => {
+					const active = j === index;
+					slide.style.opacity = active ? '1' : '0';
+					slide.style.pointerEvents = active ? 'auto' : 'none';
+				});
+				if (counter) counter.textContent = `${index + 1} / ${slides.length}`;
+			}
+
+			el.querySelector('[data-prev]')?.addEventListener('click', () => show(index - 1));
+			el.querySelector('[data-next]')?.addEventListener('click', () => show(index + 1));
+		});
+	}
+
+	initCarousels(document);
+	document.addEventListener('astro:page-load', () => initCarousels(document));
+</script>

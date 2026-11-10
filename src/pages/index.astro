@@ -5,8 +5,10 @@ import ProjectRows from '../components/ProjectRows.astro';
 import DeckBanner from '../components/DeckBanner.astro';
 import { getSortedProjects } from '../utils/projects';
 import { hasOverviewPdf } from '../utils/deck';
-import { SITE, SKILLS } from '../consts';
+import { SITE } from '../consts';
 import LinkedInIcon from '../components/LinkedInIcon.astro';
+import { Image } from 'astro:assets';
+import portrait from '../assets/Portrait/Portrait.jpg';
 
 const projects = await getSortedProjects();
 
@@ -46,41 +48,39 @@ const hasMore = projects.length > HOMEPAGE_LIMIT;
 		id="about"
 		class="mx-auto max-w-[1300px] scroll-mt-20 border-t border-line px-5 py-12 sm:px-8 sm:py-16 lg:px-12"
 	>
-		<div class="grid gap-9 lg:grid-cols-[1.5fr_1fr] lg:gap-14">
+		<div class="grid gap-9 lg:grid-cols-[1.5fr_1fr] lg:items-center lg:gap-14">
 			<div>
 				<h2 class="h-section mb-6">About</h2>
 
 				<p class="mb-[1.05rem] max-w-[62ch] text-[1.02rem] leading-[1.68] text-fog">
-					I'm an <b class="font-medium text-chalk">Engineering Physics</b> student at the
-					{SITE.school}, working toward a career in mechanical design. Eng Phys is a broad
-					program, covering mechanics, electronics, software, and physics, and I've pointed
-					that breadth squarely at <b class="font-medium text-chalk">mechanical engineering</b>.
+					Hi, I'm James, a third-year <b class="font-medium text-chalk">Engineering Physics</b> student at the{' '}
+					{SITE.school}, specializing in mechanical engineering. Eng Phys is a broad program,
+					essentially mechatronics design complemented by honours physics, and mechanical
+					engineering is where that breadth has landed me.
 				</p>
 				<p class="mb-[1.05rem] max-w-[62ch] text-[1.02rem] leading-[1.68] text-fog">
-					What I care about is the loop between analysis and hardware: run the numbers,
-					model the part, make it, then find out where the model was wrong. Most of the
-					projects here started because something broke, bound, or slipped, and the
-					interesting work was figuring out why.
+					My passion is <b class="font-medium text-chalk">hands-on design and fabrication</b>,
+					shaped by my time on the university's Baja SAE team and academic work with a strong
+					focus on robotics. That's taken me through developing automotive components, lean
+					manufacturing solutions, and autonomous robots, taking ownership of each one from CAD
+					modeling and analysis (FEA, hand calcs in Excel) through physical testing and fabrication.
 				</p>
 				<p class="max-w-[62ch] text-[1.02rem] leading-[1.68] text-fog">
-					I'm currently looking for <b class="font-medium text-chalk">mechanical
-					engineering internships</b> where I can contribute to real design work: CAD,
-					analysis, prototyping, and time on the shop floor.
+					I'm currently looking for <b class="font-medium text-chalk">mechanical and
+					manufacturing internships</b> where I can contribute to real design work, with plenty
+					of time on the shop floor, which is genuinely my favourite part.
 				</p>
 			</div>
 
-			<div>
-				<h3 class="mb-3.5 text-[0.95rem] font-semibold">Tools and Skills</h3>
-				<ul class="flex flex-wrap gap-1.5">
-					{
-						SKILLS.map((skill) => (
-							<li class="rounded border border-line px-2.5 py-1.5 text-[0.81rem] text-fog">
-								{skill}
-							</li>
-						))
-					}
-				</ul>
-			</div>
+			<figure class="m-0 mx-auto w-full max-w-[19rem] overflow-hidden rounded-lg border border-line bg-surface lg:ml-auto lg:mr-[22%]">
+				<Image
+					src={portrait}
+					alt="James in a UBC Baja hoodie"
+					widths={[320, 640]}
+					sizes="(min-width: 1024px) 19rem, 65vw"
+					class="aspect-square h-full w-full object-cover"
+				/>
+			</figure>
 		</div>
 	</section>
 
@@ -90,8 +90,7 @@ const hasMore = projects.length > HOMEPAGE_LIMIT;
 			<h2 class="h-section">Let's connect!</h2>
 
 			<p class="mt-4 max-w-[50ch] text-[1.02rem] leading-relaxed text-fog">
-				Open to mechanical / manufacturing engineering internships, co-ops, and design team work. The
-				fastest way to reach me is email.
+				Actively looking for mechanical / manufacturing engineering internships, co-ops, and design team work!
 			</p>
 
 			<div class="mt-7 flex flex-wrap gap-2.5">

@@ -23,6 +23,10 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
+# raw camera footage (too large for GitHub); crop/encode a web-sized clip into public/media instead
+*.MOV
+*.mov
+
 # agent skills (Impeccable et al) — reinstall with: npx skills add pbakaus/impeccable
 .agents/
 .claude/*
